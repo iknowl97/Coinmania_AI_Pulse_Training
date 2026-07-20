@@ -205,10 +205,10 @@ check_tool() {
         local ver
         ver=$("$cmd" $args 2>/dev/null | head -1) || ver="ინსტალირებულია"
         success "${name}: ${ver}"
-        ((passed++))
+        passed=$((passed + 1))
     else
         warn "${name}: ვერ მოიძებნა (შეიძლება ახალ Terminal-ში გამოჩნდეს)"
-        ((failed++))
+        failed=$((failed + 1))
     fi
 }
 

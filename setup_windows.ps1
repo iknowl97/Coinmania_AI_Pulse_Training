@@ -246,8 +246,9 @@ try {
 # Codex CLI
 Write-Info "Codex CLI-ის ინსტალაცია..."
 try {
-    powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
-    Write-Success "Codex CLI დაინსტალირებულია"
+    $null = & powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex" 2>&1
+    if ($LASTEXITCODE -eq 0) { Write-Success "Codex CLI დაინსტალირებულია" }
+    else { throw "exit code $LASTEXITCODE" }
 } catch {
     Write-Warn "Codex CLI ვერ დაინსტალირდა: $($_.Exception.Message)"
     Write-Info "ხელით: powershell -ExecutionPolicy ByPass -c `"irm https://chatgpt.com/codex/install.ps1 | iex`""
