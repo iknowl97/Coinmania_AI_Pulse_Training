@@ -10,3 +10,5 @@ Also we are using Google Workspace for our organization so all of our team membe
 ./Stack.md
 Requirements.jpeg
 Agentic*AI*კორპორატიული*ტრენინგის*შეთავაზება.pdf
+
+Vercel is (iknowlgio)
