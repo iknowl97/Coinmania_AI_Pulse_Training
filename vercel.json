@@ -1,9 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "cleanUrls": true,
-  "rewrites": [
-    { "source": "/", "destination": "/PREPARATION_GUIDE.html" }
-  ],
   "headers": [
     {
       "source": "/setup_windows.ps1",
