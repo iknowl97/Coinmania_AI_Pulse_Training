@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<title>Coinmania — AI Training მომზადების ინსტრუქცია</title>
+<style>
+  /* ── SYSTEM FONTS (no network needed for PDF render) ── */
+  :root {
+    --brand:    #6B46C1;
+    --brand-lt: #EDE9FE;
+    --green:    #059669;
+    --green-lt: #D1FAE5;
+    --blue:     #1D4ED8;
+    --blue-lt:  #DBEAFE;
+    --orange:   #D97706;
+    --orange-lt:#FEF3C7;
+    --gray:     #374151;
+    --gray-lt:  #F3F4F6;
+    --border:   #E5E7EB;
+    --text:     #111827;
+    --font:     'Segoe UI', 'DejaVu Sans', Arial, sans-serif;
+    --mono:     'Consolas', 'Courier New', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font);
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: var(--text);
+    background: #fff;
+    padding: 0 32px 40px;
+    width: 100%;
+  }
+
+  /* ── LINKS — plain text in print, styled on screen ── */
+  a { color: var(--blue); text-decoration: none; }
+
+  /* ── HEADER (page 1 only) ── */
+  .doc-header {
+    background: linear-gradient(135deg, #6B46C1 0%, #4F46E5 100%);
+    color: #fff;
+    border-radius: 10px;
+    padding: 26px 28px 22px;
+    margin: 20px 0 28px;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .doc-header .logo { font-size: 32px; margin-bottom: 8px; }
+  .doc-header h1 { font-size: 20px; font-weight: 700; margin-bottom: 6px; letter-spacing: -.2px; }
+  .doc-header p  { font-size: 12px; opacity: .88; line-height: 1.55; }
+
+  /* ── SECTION HEADERS ── */
+  h2 {
+    font-size: 14.5px; font-weight: 700;
+    color: var(--brand);
+    border-left: 4px solid var(--brand);
+    padding: 6px 12px;
+    background: var(--brand-lt);
+    border-radius: 0 6px 6px 0;
+    margin: 26px 0 12px;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  h3 {
+    font-size: 12.5px; font-weight: 600;
+    color: var(--gray);
+    margin: 16px 0 6px;
+  }
+
+  /* ── CALLOUTS ── */
+  .callout {
+    display: flex; gap: 9px; align-items: flex-start;
+    padding: 9px 12px; border-radius: 6px; margin: 8px 0;
+    font-size: 11.5px; line-height: 1.55;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .callout-info    { background: var(--blue-lt);   border-left: 3px solid var(--blue); }
+  .callout-warn    { background: var(--orange-lt); border-left: 3px solid var(--orange); }
+  .callout-success { background: var(--green-lt);  border-left: 3px solid var(--green); }
+  .callout .icon   { font-size: 13px; flex-shrink: 0; margin-top: 2px; }
+
+  /* ── CODE ── */
+  pre, code { font-family: var(--mono); font-size: 11.5px; }
+  pre {
+    background: #1E1E2E;
+    color: #CDD6F4;
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin: 6px 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  pre code { background: none; color: inherit; padding: 0; }
+  code {
+    background: #F1F5F9;
+    color: #6B21A8;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 11px;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* ── TABLES ── */
+  table {
+    width: 100%; border-collapse: collapse;
+    margin: 8px 0; font-size: 11.5px;
+  }
+  th {
+    background: var(--gray-lt);
+    padding: 7px 10px; text-align: left;
+    font-weight: 600; color: var(--gray);
+    border: 1px solid var(--border);
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  td { padding: 7px 10px; border: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #FAFAFA; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+
+  /* ── LISTS ── */
+  ol, ul { padding-left: 18px; margin: 5px 0; }
+  li { margin: 2px 0; }
+
+  /* ── CHECKLIST ── */
+  .checklist { list-style: none; padding-left: 0; }
+  .checklist li {
+    padding: 5px 10px; margin: 3px 0;
+    border-radius: 5px; background: var(--gray-lt);
+    display: flex; align-items: center; gap: 9px;
+    font-size: 11.5px;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .checklist .box {
+    width: 14px; height: 14px; min-width: 14px;
+    border: 1.5px solid #9CA3AF; border-radius: 3px;
+    display: inline-block; flex-shrink: 0;
+  }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-block; padding: 1px 7px;
+    border-radius: 99px; font-size: 10px; font-weight: 600;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .badge-win { background: #DBEAFE; color: var(--blue); }
+  .badge-mac { background: #D1FAE5; color: var(--green); }
+
+  /* ── DIVIDER ── */
+  hr { border: none; border-top: 1px solid var(--border); margin: 22px 0; }
+
+  /* ── FOOTER ── */
+  .footer {
+    margin-top: 32px; padding: 14px 18px;
+    background: var(--gray-lt); border-radius: 7px;
+    font-size: 11.5px; color: var(--gray); text-align: center;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* ════════════════════════════════════════
+     PRINT-SPECIFIC OVERRIDES
+     ════════════════════════════════════════ */
+  @media print {
+    @page {
+      size: A4;
+      margin: 18mm 16mm 20mm;
+    }
+
+    body { padding: 0; font-size: 12px; }
+
+    /* ── Kill Edge/Chrome URL-after-link expansion ── */
+    a::after          { content: none !important; display: none !important; }
+    a[href]::after    { content: none !important; display: none !important; }
+    a                 { color: var(--text); text-decoration: none; }
+
+    /* ── Page break strategy ── */
+    /* Each major section starts on a fresh line with heading kept with content */
+    h2 {
+      page-break-before: always;
+      page-break-after:  avoid;
+      break-before:      page;
+      break-after:       avoid;
+    }
+    /* First h2 (How to run commands) stays on page 1 with the header */
+    h2:first-of-type {
+      page-break-before: avoid;
+      break-before:      avoid;
+    }
+    h3 {
+      page-break-after: avoid;
+      break-after:      avoid;
+    }
+    /* Keep these blocks intact — never split across pages */
+    pre, table, .callout, figure, blockquote {
+      page-break-inside: avoid;
+      break-inside:      avoid;
+    }
+    /* Keep heading with the first line of following content */
+    h3 + p, h3 + pre, h3 + ol, h3 + ul, h3 + .callout { page-break-before: avoid; break-before: avoid; }
+
+    /* Orphan / widow control */
+    p       { orphans: 3; widows: 3; }
+    li      { page-break-inside: avoid; break-inside: avoid; }
+
+    /* Checklist: keep rows together, never split the block */
+    .checklist      { page-break-inside: avoid; break-inside: avoid; }
+    .checklist li   { page-break-inside: avoid; break-inside: avoid; }
+
+    /* Table: keep header with first row */
+    tr { page-break-inside: avoid; break-inside: avoid; }
+    thead { display: table-header-group; }
+
+    /* Doc header stays on page 1 — no forced break after */
+    .doc-header { page-break-inside: avoid; break-inside: avoid; page-break-after: avoid; break-after: avoid; }
+
+    /* Footer stays together */
+    .footer { page-break-inside: avoid; break-inside: avoid; }
+
+    /* HR: don't start a page with one */
+    hr { page-break-after: avoid; break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ PAGE 1: HEADER + HOW TO RUN ══════════════ -->
+<div class="doc-header">
+  <div class="logo">🚀</div>
+  <h1>Coinmania — AI Training მომზადების ინსტრუქცია</h1>
+  <p>ეს ინსტრუქცია დაგეხმარებათ მოამზადოთ კომპიუტერი <strong>აგენტური AI-ის ტრენინგისთვის</strong>.<br>
+  მიყევით ნაბიჯებს ზემოდან ქვემოთ, თანმიმდევრობით.</p>
+</div>
+
+<h2>📌 როგორ გავუშვათ ბრძანებები?</h2>
+
+<p>ამ ინსტრუქციაში შეხვდებით მუქ ბლოკებში ჩასმულ ბრძანებებს. ისინი უნდა გაუშვათ <strong>PowerShell</strong>-ში (Windows) ან <strong>Terminal</strong>-ში (Mac).</p>
+
+<h3>🪟 <span class="badge badge-win">Windows</span> — PowerShell-ის გახსნა ადმინისტრატორად</h3>
+<ol>
+  <li>კლავიატურაზე დააჭირეთ <strong>Windows ⊞</strong> ღილაკს.</li>
+  <li>ჩაწერეთ <code>PowerShell</code>.</li>
+  <li>გამოსულ <em>Windows PowerShell</em>-ზე <strong>მარჯვენა კლიკი → Run as administrator → Yes</strong>.</li>
+</ol>
+
+<h3>🍎 <span class="badge badge-mac">Mac</span> — Terminal-ის გახსნა</h3>
+<ol>
+  <li>დააჭირეთ <strong>Command ⌘ + Space</strong>.</li>
+  <li>ჩაწერეთ <code>Terminal</code> → <strong>Enter</strong>.</li>
+</ol>
+
+<div class="callout callout-info">
+  <span class="icon">💡</span>
+  <div><strong>ბრძანების გაშვება:</strong> დააკოპირეთ ბლოკი (Ctrl+C / ⌘+C), ჩასვით PowerShell-ში ან Terminal-ში (მარჯვენა კლიკი / ⌘+V), დააჭირეთ <strong>Enter</strong>.</div>
+</div>
+
+<!-- ══════════════ STEP 1: WINDOWS SETTINGS ══════════════ -->
+<h2>⚙️ ნაბიჯი 1: Windows-ის პარამეტრების გამართვა</h2>
+
+<div class="callout callout-success">
+  <span class="icon">🍎</span>
+  <div><strong>Mac-ის მომხმარებლებმა ეს ნაბიჯი გამოტოვეთ</strong> — გადადით ნაბიჯი 2-ზე.</div>
+</div>
+
+<h3>1.1 — Developer Mode-ის ჩართვა</h3>
+<ol>
+  <li>დააჭირეთ <strong>Windows + I</strong> (Settings).</li>
+  <li>ძებნაში ჩაწერეთ <code>Developer settings</code> → დააწკაპუნეთ შედეგზე.</li>
+  <li><strong>Developer Mode</strong> — გადართეთ <strong>On</strong> → <strong>Yes</strong>.</li>
+</ol>
+
+<h3>1.2 — ვირტუალიზაციის შემოწმება</h3>
+<ol>
+  <li>დააჭირეთ <strong>Ctrl + Shift + Esc</strong> (Task Manager).</li>
+  <li>გადადით <strong>Performance → CPU</strong>.</li>
+  <li><strong>Virtualization</strong> — უნდა წეროს <strong>Enabled</strong>.</li>
+</ol>
+<div class="callout callout-warn">
+  <span class="icon">⚠️</span>
+  <div>თუ წერია <strong>Disabled</strong> — დაუკავშირდით გიორგი ამირიძეს ან სულხან ჯაშს.</div>
+</div>
+
+<h3>1.3 — WSL და Hyper-V — გაუშვით სათითაოდ PowerShell (Admin)-ში:</h3>
+<pre><code>wsl --install</code></pre>
+<pre><code>Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All</code></pre>
+<pre><code>Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform -All</code></pre>
+<div class="callout callout-warn">
+  <span class="icon">🔄</span>
+  <div>თუ გეკითხებათ <code>(Y/N)</code> — ჩაწერეთ <strong>Y</strong> → Enter. კომპიუტერი გადაიტვირთება.</div>
+</div>
+
+<!-- ══════════════ STEP 2: APPS ══════════════ -->
+<h2>📦 ნაბიჯი 2: პროგრამების ჩამოტვირთვა და ინსტალაცია</h2>
+
+<p>გადადით შესაბამის ბმულზე → ჩამოტვირთეთ → გაუშვით → <em>Next → Next → Install</em>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>პროგრამა</th>
+      <th><span class="badge badge-win">Windows</span> ბმული</th>
+      <th><span class="badge badge-mac">Mac</span> ბმული</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>VS Code</strong></td>
+      <td>code.visualstudio.com/download</td>
+      <td>code.visualstudio.com/download</td>
+    </tr>
+    <tr>
+      <td><strong>Cursor</strong></td>
+      <td>cursor.com</td>
+      <td>cursor.com</td>
+    </tr>
+    <tr>
+      <td><strong>Claude Desktop</strong></td>
+      <td>claude.ai/download</td>
+      <td>claude.ai/download</td>
+    </tr>
+    <tr>
+      <td><strong>ChatGPT Desktop</strong></td>
+      <td>Microsoft Store → "ChatGPT"</td>
+      <td>chatgpt.com → Download for Mac</td>
+    </tr>
+    <tr>
+      <td><strong>Git</strong></td>
+      <td>git-scm.com/download/win</td>
+      <td>git-scm.com/download/mac</td>
+    </tr>
+    <tr>
+      <td><strong>Node.js LTS</strong></td>
+      <td>nodejs.org — მწვანე ღილაკი</td>
+      <td>nodejs.org — მწვანე ღილაკი</td>
+    </tr>
+    <tr>
+      <td><strong>Obsidian</strong></td>
+      <td>obsidian.md</td>
+      <td>obsidian.md</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout callout-info">
+  <span class="icon">💡</span>
+  <div>ინსტალაციისას ყველაფერი დატოვეთ <strong>ნაგულისხმევი (default)</strong> და დააჭირეთ Next-ს.</div>
+</div>
+
+<!-- ══════════════ STEP 3: CLI ══════════════ -->
+<h2>🛠️ ნაბიჯი 3: CLI ვერსიების დაყენება</h2>
+
+<p>გახსენით PowerShell (Admin) ან Terminal და სათითაოდ გაუშვით ბრძანებები.</p>
+
+<h3>🟠 Claude Code CLI</h3>
+<p><span class="badge badge-win">Windows</span> — PowerShell (Admin):</p>
+<pre><code>irm https://claude.ai/install.ps1 | iex</code></pre>
+<p><span class="badge badge-mac">Mac</span> — Terminal:</p>
+<pre><code>curl -fsSL https://claude.ai/install.sh | bash</code></pre>
+<p>შემოწმება — გაუშვით ორივე პლატფორმაზე:</p>
+<pre><code>claude --version</code></pre>
+
+<h3>🟢 Codex CLI (ChatGPT)</h3>
+<p><span class="badge badge-win">Windows</span>:</p>
+<pre><code>powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"</code></pre>
+<p><span class="badge badge-mac">Mac</span>:</p>
+<pre><code>curl -fsSL https://chatgpt.com/codex/install.sh | sh</code></pre>
+<div class="callout callout-info">
+  <span class="icon">ℹ️</span>
+  <div>პირველი გაშვებისას (<code>codex</code>) გეკითხებათ ავტორიზაცია — აირჩიეთ <strong>Sign in with ChatGPT</strong>.</div>
+</div>
+
+<h3>🌐 Grok CLI</h3>
+<p><span class="badge badge-win">Windows</span>:</p>
+<pre><code>irm https://x.ai/cli/install.ps1 | iex</code></pre>
+<p><span class="badge badge-mac">Mac</span>:</p>
+<pre><code>curl -fsSL https://x.ai/cli/install.sh | bash</code></pre>
+
+<h3>🔵 Antigravity CLI (Google)</h3>
+<p><span class="badge badge-win">Windows</span>:</p>
+<pre><code>irm https://antigravity.google/cli/install.ps1 | iex</code></pre>
+<p><span class="badge badge-mac">Mac</span>:</p>
+<pre><code>curl -fsSL https://antigravity.google/cli/install.sh | bash</code></pre>
+
+<!-- ══════════════ STEP 4: ACCOUNTS ══════════════ -->
+<h2>🔑 ნაბიჯი 4: ანგარიშების მომზადება</h2>
+
+<h3>🏢 Claude Team &amp; ChatGPT Team — გუნდური ანგარიშები</h3>
+<p>ინდივიდუალური რეგისტრაცია <strong>არ</strong> გჭირდებათ — გუნდში გაამატებთ:</p>
+<ol>
+  <li>გაუგზავნეთ <code>@coinmania.ge</code> მეილი <strong>გიორგი ამირიძეს</strong> ან <strong>სულხან ჯაშს</strong>.</li>
+  <li>ისინი დაგამატებენ გუნდში.</li>
+  <li>მეილზე მოგივათ მოწვევა — მიყევით ინსტრუქციას.</li>
+</ol>
+
+<h3>📧 Google Gemini &amp; NotebookLM</h3>
+<p>გახსენით ბრაუზერი და გადადით <strong>gemini.google.com</strong> — შედით <code>@coinmania.ge</code> ანგარიშით. წვდომა უკვე გაქვთ.</p>
+
+<h3>🌐 სხვა AI სერვისები</h3>
+<p>თითოეულ საიტზე დააჭირეთ <strong>Sign Up</strong>. შეგიძლიათ <strong>Sign up with Google</strong> (<code>@coinmania.ge</code>) გამოიყენოთ.</p>
+
+<table>
+  <thead>
+    <tr><th>სერვისი</th><th>მისამართი</th><th>შენიშვნა</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Grok</strong></td><td>grok.com</td><td>X (Twitter) ანგარიშითაც შიძლება</td></tr>
+    <tr><td><strong>Perplexity</strong></td><td>perplexity.ai</td><td>Google-ით შიძლება</td></tr>
+    <tr><td><strong>Kimi</strong></td><td>kimi.moonshot.cn</td><td>Google-ით შიძლება</td></tr>
+    <tr><td><strong>Minimax</strong></td><td>minimaxi.com</td><td>Google-ით შიძლება</td></tr>
+    <tr><td><strong>DeepSeek</strong></td><td>deepseek.com</td><td>Google-ით შიძლება</td></tr>
+    <tr><td><strong>Qwen</strong></td><td>chat.qwenlm.ai</td><td>Google-ით შიძლება</td></tr>
+  </tbody>
+</table>
+
+<!-- ══════════════ CHECKLIST ══════════════ -->
+<h2>✅ მზადყოფნის ჩეკლისტი</h2>
+
+<p>ტრენინგამდე შეამოწმეთ და მონიშნეთ:</p>
+
+<ul class="checklist">
+  <li><span class="box"></span><span class="badge badge-win">Win</span>&nbsp; Developer Mode ჩართულია</li>
+  <li><span class="box"></span><span class="badge badge-win">Win</span>&nbsp; WSL დაინსტალირებულია</li>
+  <li><span class="box"></span><span class="badge badge-win">Win</span>&nbsp; Virtualization: Enabled</li>
+  <li><span class="box"></span>VS Code დაინსტალირებულია</li>
+  <li><span class="box"></span>Cursor დაინსტალირებულია</li>
+  <li><span class="box"></span>Claude Desktop დაინსტალირებულია</li>
+  <li><span class="box"></span>ChatGPT Desktop დაინსტალირებულია</li>
+  <li><span class="box"></span>Git დაინსტალირებულია</li>
+  <li><span class="box"></span>Node.js დაინსტალირებულია</li>
+  <li><span class="box"></span>Obsidian დაინსტალირებულია</li>
+  <li><span class="box"></span><code>claude --version</code> — Claude Code CLI მუშაობს</li>
+  <li><span class="box"></span><code>codex</code> — Codex CLI მუშაობს</li>
+  <li><span class="box"></span><code>grok</code> — Grok CLI მუშაობს</li>
+  <li><span class="box"></span><code>antigravity</code> — Antigravity CLI მუშაობს</li>
+  <li><span class="box"></span>🔑 Claude Team-ში ხართ დამატებული</li>
+  <li><span class="box"></span>🔑 ChatGPT Team-ში ხართ დამატებული</li>
+  <li><span class="box"></span>🔑 Google Gemini-ზე შედიხართ (@coinmania.ge)</li>
+  <li><span class="box"></span>🔑 Grok, Perplexity, Kimi, Minimax, DeepSeek, Qwen — ანგარიშები შექმნილია</li>
+</ul>
+
+<div class="footer">
+  📞 კითხვები? დაუკავშირდით <strong>გიორგი ამირიძეს</strong> ან <strong>სულხან ჯაშს</strong>
+</div>
+
+</body>
+</html>
