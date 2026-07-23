@@ -624,11 +624,11 @@ main { padding-bottom: 60px; }
         </thead>
         <tbody>
           <tr><td><strong>Grok</strong></td><td><a href="https://grok.com/" target="_blank">↗ grok.com</a></td><td style="color:var(--text-2)">X (Twitter) ან Google</td></tr>
-          <tr><td><strong>Perplexity</strong></td><td><a href="https://www.perplexity.ai/" target="_blank">↗ perplexity.ai</a></td><td style="color:var(--text-2)">Google-ით შიძლება</td></tr>
-          <tr><td><strong>Kimi</strong></td><td><a href="https://kimi.moonshot.cn/" target="_blank">↗ kimi.moonshot.cn</a></td><td style="color:var(--text-2)">Google-ით შიძლება</td></tr>
-          <tr><td><strong>Minimax</strong></td><td><a href="https://www.minimaxi.com/" target="_blank">↗ minimaxi.com</a></td><td style="color:var(--text-2)">Google-ით შიძლება</td></tr>
-          <tr><td><strong>DeepSeek</strong></td><td><a href="https://www.deepseek.com/" target="_blank">↗ deepseek.com</a></td><td style="color:var(--text-2)">Google-ით შიძლება</td></tr>
-          <tr><td><strong>Qwen</strong></td><td><a href="https://chat.qwenlm.ai/" target="_blank">↗ chat.qwenlm.ai</a></td><td style="color:var(--text-2)">Google-ით შიძლება</td></tr>
+          <tr><td><strong>Perplexity</strong></td><td><a href="https://www.perplexity.ai/" target="_blank">↗ perplexity.ai</a></td><td style="color:var(--text-2)">Google-ით შეიძლება</td></tr>
+          <tr><td><strong>Kimi</strong></td><td><a href="https://kimi.moonshot.cn/" target="_blank">↗ kimi.moonshot.cn</a></td><td style="color:var(--text-2)">Google-ით შეიძლება</td></tr>
+          <tr><td><strong>Minimax</strong></td><td><a href="https://www.minimaxi.com/" target="_blank">↗ minimaxi.com</a></td><td style="color:var(--text-2)">Google-ით შეიძლება</td></tr>
+          <tr><td><strong>DeepSeek</strong></td><td><a href="https://www.deepseek.com/" target="_blank">↗ deepseek.com</a></td><td style="color:var(--text-2)">Google-ით შეიძლება</td></tr>
+          <tr><td><strong>Qwen</strong></td><td><a href="https://chat.qwenlm.ai/" target="_blank">↗ chat.qwenlm.ai</a></td><td style="color:var(--text-2)">Google-ით შეიძლება</td></tr>
         </tbody>
       </table>
     </div>
@@ -677,7 +677,7 @@ main { padding-bottom: 60px; }
     <span class="callout-icon">⚡</span>
     <div>
       <strong>1 კლიკი — პროგრამების უმეტესობა!</strong> ჩამოტვირთეთ სკრიპტი თქვენი პლატფორმისთვის — ის ავტომატურად დააყენებს Git, Node.js, VS Code, Cursor, Claude Desktop, ChatGPT, Obsidian-ს და ყველა CLI-ს.<br>
-      <span style="font-size:12.5px;color:var(--text-2);margin-top:3px;display:block;">ანგარიშების შექმნა, Windows Developer Mode და CLI ავტორიზაცია მაინც ხელით მოითხოვს — <a href="#step4" class="il">ნაბიჯი 4</a> იხილეთ ზემოთ.</span>
+      <span style="font-size:12.5px;color:var(--text-2);margin-top:3px;display:block;">ანგარიშების შექმნა, Windows Developer Mode და CLI-ის ავტორიზაცია მაინც ხელით უნდა შესრულდეს — იხ. <a href="#step4" class="il">ნაბიჯი 4</a> ზემოთ.</span>
     </div>
   </div>
 
@@ -745,7 +745,6 @@ main { padding-bottom: 60px; }
      EMBEDDED SCRIPT DATA  (not executed — text/plain)
 ════════════════════════════════════════════ -->
 <script type="text/plain" id="win-data">
-#Requires -RunAsAdministrator
 <#
 ╔══════════════════════════════════════════════════════════════════╗
 ║  🚀 Coinmania — AI Training Setup Script (Windows)              ║
@@ -754,9 +753,28 @@ main { padding-bottom: 60px; }
 ║  აპლიკაციას და CLI ინსტრუმენტს ტრენინგისთვის.                   ║
 ║                                                                  ║
 ║  გაშვება: მარჯვენა კლიკი → Run with PowerShell                  ║
-║  ან: PowerShell (Admin) → .\setup_windows.ps1                   ║
+║  (სკრიპტი თავად მოითხოვს ადმინისტრატორის უფლებებს — UAC)         ║
 ╚══════════════════════════════════════════════════════════════════╝
 #>
+
+# კონსოლის UTF-8 (ქართული/emoji სწორად გამოჩნდეს)
+try { chcp 65001 > $null; [Console]::OutputEncoding = [System.Text.Encoding]::UTF8 } catch {}
+
+# ავტომატური ელევაცია ადმინისტრატორამდე (ასწორებს გაშვებისთანავე ჩაკეტვას)
+$principal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    if ([string]::IsNullOrEmpty($PSCommandPath)) {
+        Write-Host "  ❌ გთხოვთ გაუშვათ ფაილი: მარჯვენა კლიკი -> Run with PowerShell" -ForegroundColor Yellow
+        Read-Host "  Enter-ი გასასვლელად"; exit 1
+    }
+    try {
+        Start-Process powershell.exe -Verb RunAs -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-File',"`"$PSCommandPath`"")
+    } catch {
+        Write-Host "  ⚠️  UAC მოთხოვნა უარყოფილია. სკრიპტს ადმინისტრატორის უფლებები სჭირდება." -ForegroundColor Red
+        Read-Host "  Enter-ი გასასვლელად"
+    }
+    exit
+}
 
 $ErrorActionPreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
@@ -784,13 +802,6 @@ Write-Host "    • Developer Mode, WSL2, Hyper-V" -ForegroundColor Gray
 Write-Host "    • Git, Node.js, VS Code, Cursor, Claude Desktop, ChatGPT, Obsidian" -ForegroundColor Gray
 Write-Host "    • Claude Code CLI, Codex CLI, Grok CLI, Antigravity CLI" -ForegroundColor Gray
 Write-Host ""
-
-$currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
-if (-not $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    Write-Host "  ❌ ადმინისტრატორის უფლებები საჭიროა!" -ForegroundColor Red
-    Write-Host "     PowerShell-ი გახსენით 'Run as Administrator' რეჟიმში." -ForegroundColor Yellow
-    Read-Host "  Enter-ი გასასვლელად"; exit 1
-}
 
 $confirm = Read-Host "  გსურთ ინსტალაციის დაწყება? (Y/N)"
 if ($confirm -ne 'Y' -and $confirm -ne 'y') { Write-Host "  გაუქმებულია." -ForegroundColor Yellow; exit 0 }
@@ -956,7 +967,8 @@ echo -e "  ${GRAY}  • Claude Code CLI · Codex CLI · Grok CLI · Antigravity 
 echo
 
 read -p "  გსურთ ინსტალაციის დაწყება? (y/N): " confirm
-if [[ "${confirm,,}" != "y" ]]; then
+confirm_lc=$(printf '%s' "$confirm" | tr '[:upper:]' '[:lower:]')
+if [ "$confirm_lc" != "y" ]; then
     echo -e "  ${YELLOW}ინსტალაცია გაუქმებულია.${NC}"; exit 0
 fi
 
@@ -1123,16 +1135,19 @@ function chk(li) {
 }
 
 // ── File download from text/plain tag ──
-function dlFile(id, filename) {
-  const src = document.getElementById(id).textContent.trim();
+// bom=true prepends a UTF-8 BOM so Windows PowerShell 5.1 reads Georgian
+// correctly. NEVER add a BOM to the .sh — it would break the shebang line.
+function dlFile(id, filename, bom) {
+  let src = document.getElementById(id).textContent.trim() + '\n';
+  if (bom) src = String.fromCharCode(0xFEFF) + src;
   const blob = new Blob([src], { type: 'text/plain;charset=utf-8' });
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
   a.href = url; a.download = filename; document.body.appendChild(a);
   a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
 }
-function dlWin() { dlFile('win-data', 'setup_windows.ps1'); }
-function dlMac() { dlFile('mac-data', 'setup_mac.sh'); }
+function dlWin() { dlFile('win-data', 'setup_windows.ps1', true); }
+function dlMac() { dlFile('mac-data', 'setup_mac.sh', false); }
 </script>
 </body>
 </html>

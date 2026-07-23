@@ -44,7 +44,8 @@ echo -e "  ${GRAY}  • Claude Code CLI, Codex CLI, Grok CLI, Antigravity CLI${N
 echo
 
 read -p "  გსურთ ინსტალაციის დაწყება? (y/N): " confirm
-if [[ "${confirm,,}" != "y" ]]; then
+confirm_lc=$(printf '%s' "$confirm" | tr '[:upper:]' '[:lower:]')
+if [ "$confirm_lc" != "y" ]; then
     echo -e "  ${YELLOW}ინსტალაცია გაუქმებულია.${NC}"
     exit 0
 fi

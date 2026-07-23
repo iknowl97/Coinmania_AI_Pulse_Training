@@ -1,5 +1,4 @@
-#Requires -RunAsAdministrator
-<#
+﻿<#
 ╔══════════════════════════════════════════════════════════════════╗
 ║  🚀 Coinmania — AI Training Setup Script (Windows)              ║
 ║  ─────────────────────────────────────────────────────────────── ║
@@ -7,9 +6,35 @@
 ║  აპლიკაციას და CLI ინსტრუმენტს ტრენინგისთვის.                   ║
 ║                                                                  ║
 ║  გაშვება: მარჯვენა კლიკი → Run with PowerShell                  ║
-║  ან: PowerShell (Admin) → .\setup_windows.ps1                   ║
+║  (სკრიპტი თავად მოითხოვს ადმინისტრატორის უფლებებს — UAC)         ║
 ╚══════════════════════════════════════════════════════════════════╝
 #>
+
+# ──────────────────────────────────────────────
+# კონსოლის UTF-8 (ქართული/emoji სწორად გამოჩნდეს)
+# ──────────────────────────────────────────────
+try { chcp 65001 > $null; [Console]::OutputEncoding = [System.Text.Encoding]::UTF8 } catch {}
+
+# ──────────────────────────────────────────────
+# ავტომატური ელევაცია ადმინისტრატორამდე
+# (ასწორებს "გაშვებისთანავე ჩაკეტვას", როცა admin არ არის)
+# ──────────────────────────────────────────────
+$principal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    if ([string]::IsNullOrEmpty($PSCommandPath)) {
+        Write-Host ""
+        Write-Host "  ❌ გთხოვთ გაუშვათ ფაილი: მარჯვენა კლიკი -> Run with PowerShell" -ForegroundColor Yellow
+        Read-Host "  Enter-ი გასასვლელად"; exit 1
+    }
+    try {
+        Start-Process powershell.exe -Verb RunAs -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-File',"`"$PSCommandPath`"")
+    } catch {
+        Write-Host ""
+        Write-Host "  ⚠️  UAC მოთხოვნა უარყოფილია. სკრიპტს ადმინისტრატორის უფლებები სჭირდება." -ForegroundColor Red
+        Read-Host "  Enter-ი გასასვლელად"
+    }
+    exit
+}
 
 # ──────────────────────────────────────────────
 # კონფიგურაცია
@@ -66,19 +91,6 @@ Write-Host "    • Git, Node.js, VS Code, Cursor, Claude Desktop" -ForegroundCo
 Write-Host "    • ChatGPT Desktop, Obsidian" -ForegroundColor Gray
 Write-Host "    • Claude Code CLI, Codex CLI, Grok CLI, Antigravity CLI" -ForegroundColor Gray
 Write-Host ""
-
-# ──────────────────────────────────────────────
-# ადმინისტრატორის უფლებების შემოწმება
-# ──────────────────────────────────────────────
-$currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
-if (-not $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    Write-Host ""
-    Write-Host "  ❌ ეს სკრიპტი მოითხოვს ადმინისტრატორის უფლებებს!" -ForegroundColor Red
-    Write-Host "     გთხოვთ გაუშვათ PowerShell 'Run as Administrator' რეჟიმში." -ForegroundColor Yellow
-    Write-Host ""
-    Read-Host "  დააჭირეთ Enter-ს გასასვლელად"
-    exit 1
-}
 
 $confirm = Read-Host "  გსურთ ინსტალაციის დაწყება? (Y/N)"
 if ($confirm -ne 'Y' -and $confirm -ne 'y') {
