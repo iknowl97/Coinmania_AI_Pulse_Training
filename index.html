@@ -360,13 +360,12 @@ main { padding-bottom: 60px; }
   <nav class="nav-bar">
     <div class="wrap">
       <div class="nav-inner">
-        <a href="#terminal" class="nav-link">📌 ტერმინალი</a>
-        <a href="#step1"    class="nav-link">⚙️ Windows</a>
-        <a href="#step2"    class="nav-link">📦 პროგრამები</a>
-        <a href="#step3"    class="nav-link">🛠️ CLI</a>
+        <a href="#auto"     class="nav-link accent">✨ 1-კლიკ ინსტალაცია</a>
+        <a href="#step2"    class="nav-link">📦 ხელით: პროგრამები</a>
+        <a href="#step3"    class="nav-link">🛠️ ხელით: CLI</a>
         <a href="#step4"    class="nav-link">🔑 ანგარიშები</a>
         <a href="#checklist" class="nav-link">✅ ჩეკლისტი</a>
-        <a href="#auto"     class="nav-link accent">⚡ ავტო-ინსტალაცია</a>
+        <a href="#help"     class="nav-link accent">🆘 დახმარება</a>
       </div>
     </div>
   </nav>
@@ -388,9 +387,25 @@ main { padding-bottom: 60px; }
 <div class="wrap">
 
 <!-- ════════════════════════════════════════════
-     MANUAL INSTRUCTIONS
+     TOP CTA → 1-CLICK
 ════════════════════════════════════════════ -->
-<div class="section-label">ნაბიჯ-ნაბიჯ ინსტრუქცია</div>
+<a href="#auto" style="text-decoration:none;display:block;">
+  <div class="card" style="background:linear-gradient(135deg,#0CC47D 0%,#0A8F5A 100%);border:none;margin-top:6px;">
+    <div class="card-body" style="text-align:center;padding:22px;">
+      <div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:4px;">✨ ყველაზე მარტივი გზა — 1 კლიკით ინსტალაცია</div>
+      <div style="font-size:13px;color:#fff;opacity:.92;">დააჭირეთ აქ → ავტომატურად დაყენდება ყველა პროგრამა. ტექნიკური ცოდნა არ გჭირდებათ. 👇</div>
+    </div>
+  </div>
+</a>
+
+<!-- ════════════════════════════════════════════
+     MANUAL INSTRUCTIONS (detailed fallback)
+════════════════════════════════════════════ -->
+<div class="section-label">ან — ხელით ინსტალაცია (დეტალური ინსტრუქცია)</div>
+<div class="callout c-info" style="margin-bottom:14px;">
+  <span class="callout-icon">ℹ️</span>
+  <div>ეს ნაწილი გჭირდებათ მხოლოდ იმ შემთხვევაში, თუ ავტომატური 1-კლიკ ინსტალაცია რატომღაც ვერ დასრულდა. სხვა შემთხვევაში პირდაპირ გადადით <a href="#auto" class="il">✨ 1-კლიკ ინსტალაციაზე</a>.</div>
+</div>
 
 <!-- HOW TO OPEN TERMINAL -->
 <div class="card" id="terminal">
@@ -674,60 +689,171 @@ main { padding-bottom: 60px; }
 
 <div id="auto">
   <div class="callout c-brand" style="margin-bottom:18px;">
-    <span class="callout-icon">⚡</span>
+    <span class="callout-icon">✨</span>
     <div>
-      <strong>1 კლიკი — პროგრამების უმეტესობა!</strong> ჩამოტვირთეთ სკრიპტი თქვენი პლატფორმისთვის — ის ავტომატურად დააყენებს Git, Node.js, VS Code, Cursor, Claude Desktop, ChatGPT, Obsidian-ს და ყველა CLI-ს.<br>
-      <span style="font-size:12.5px;color:var(--text-2);margin-top:3px;display:block;">ანგარიშების შექმნა, Windows Developer Mode და CLI-ის ავტორიზაცია მაინც ხელით უნდა შესრულდეს — იხ. <a href="#step4" class="il">ნაბიჯი 4</a> ზემოთ.</span>
+      <strong>ეს არის ყველაზე მარტივი გზა.</strong> აირჩიეთ თქვენი კომპიუტერი (Windows ან Mac), მიყევით ნაბიჯებს ზუსტად ისე, როგორც წერია — და ყველა პროგრამა ავტომატურად დაყენდება.<br>
+      <span style="font-size:12.5px;color:var(--text-2);margin-top:4px;display:block;">📌 <strong>ტექნიკური ცოდნა არ გჭირდებათ.</strong> უბრალოდ დააჭირეთ ღილაკებს, როგორც ქვემოთ არის ახსნილი. თუ რამე ვერ გამოვიდა — იხილეთ <a href="#help" class="il">🆘 გავრცელებული პრობლემები</a>.</span>
     </div>
   </div>
 
-  <div class="dl-grid">
-    <!-- Windows -->
-    <div class="dl-card">
-      <span class="dl-card-icon">🪟</span>
-      <h3>Windows</h3>
-      <p class="dl-desc">PowerShell სკრიპტი. ჩამოტვირთვის შემდეგ:<br><strong>მარჯვენა კლიკი → Run with PowerShell</strong></p>
-      <button class="btn btn-blue btn-lg" onclick="dlWin()">⬇ &nbsp;setup_windows.ps1</button>
-      <details style="margin-top:12px;text-align:left;">
-        <summary>რას ააყენებს?</summary>
+  <!-- ═══ WINDOWS 1-CLICK ═══ -->
+  <div class="card" style="margin-bottom:18px;">
+    <div class="card-head">
+      <span class="dl-card-icon" style="font-size:26px;margin:0;">🪟</span>
+      <span class="card-title">Windows — 1 კლიკით ინსტალაცია</span>
+      <span class="badge bw" style="margin-left:auto;">რეკომენდებული</span>
+    </div>
+    <div class="card-body">
+      <div style="text-align:center;margin-bottom:16px;">
+        <button class="btn btn-blue btn-lg" onclick="dlBat()">⬇ &nbsp;ჩამოტვირთეთ Windows ინსტალერი</button>
+        <p style="font-size:11.5px;color:var(--text-3);margin-top:6px;">ფაილი: <code>install_windows.bat</code> — პატარა, უსაფრთხო ფაილი</p>
+      </div>
+
+      <p style="font-weight:700;font-size:13px;margin:6px 0 8px;">👇 ჩამოტვირთვის შემდეგ, ზუსტად მიყევით ამ ნაბიჯებს:</p>
+      <ol class="step-list">
+        <li>ზემოთ დააჭირეთ ლურჯ ღილაკს — ჩამოიტვირთება ფაილი <code>install_windows.bat</code>.</li>
+        <li>ბრაუზერმა შეიძლება გაჩვენოთ გაფრთხილება (მაგ. <em>„install_windows.bat is not commonly downloaded"</em>). დააჭირეთ <strong>⋯ (სამი წერტილი) → Keep / შენახვა</strong>, შემდეგ <strong>Keep anyway</strong>. ⚠️ ეს ფაილი უსაფრთხოა.</li>
+        <li>გახსენით ჩამოტვირთვების საქაღალდე: დააჭირეთ კლავიშებს <code>Ctrl + J</code> (ან ბრაუზერის ზედა მარჯვენა კუთხეში ↓ ისარს) და იპოვეთ <code>install_windows.bat</code>.</li>
+        <li><strong>ორმაგად დააწკაპუნეთ</strong> ფაილზე <code>install_windows.bat</code>.</li>
+        <li>თუ გამოვა ლურჯი ფანჯარა <em>„Windows protected your PC"</em> — დააჭირეთ <strong>More info</strong>, შემდეგ <strong>Run anyway</strong>.</li>
+        <li>გამოვა ფანჯარა <em>„Do you want to allow this app to make changes?"</em> — დააჭირეთ <strong>Yes</strong>. <span style="color:var(--text-2)">(ეს აძლევს ინსტალერს უფლებას დააყენოს პროგრამები.)</span></li>
+        <li>გაიხსნება მუქი ფანჯარა და დაგისვამთ კითხვას — აკრიფეთ <code>Y</code> და დააჭირეთ <code>Enter</code>.</li>
+        <li>⏳ დაელოდეთ <strong>10–20 წუთი</strong> (ინტერნეტის სიჩქარეზეა დამოკიდებული). დაინახავთ, როგორ ყენდება პროგრამები ერთმანეთის მიყოლებით.</li>
+        <li>ბოლოს დაინახავთ შედეგს (მაგ. „7 / 7"). დააჭირეთ <code>Enter</code> ფანჯრის დასახურად. <strong>მზადაა! ✅</strong></li>
+      </ol>
+
+      <div class="callout c-info" style="margin-top:12px;">
+        <span class="callout-icon">💡</span>
+        <div>თუ ინსტალაციის ბოლოს დაგისვამთ კითხვას გადატვირთვაზე (<em>restart</em>) — აკრიფეთ <code>Y</code> და გადატვირთეთ კომპიუტერი. ეს საჭიროა WSL-ისთვის.</div>
+      </div>
+
+      <details style="margin-top:10px;">
+        <summary>ალტერნატივა (გამოცდილი მომხმარებლებისთვის): ერთი ბრძანება</summary>
+        <p style="font-size:12.5px;color:var(--text-2);margin:6px 0;">გახსენით <strong>PowerShell</strong> (Admin) და ჩასვით:</p>
+        <div class="pre-wrap"><pre style="font-size:11px;"><code>powershell -ExecutionPolicy Bypass -Command "iex (irm https://coinmania-ai-pulse-training.vercel.app/setup_windows.ps1)"</code></pre><button class="copy-btn" onclick="copyPre(this)">copy</button></div>
+        <p style="font-size:12px;color:var(--text-2);margin-top:8px;">ან ჩამოტვირთეთ სკრიპტი პირდაპირ: <button class="btn btn-ghost" style="font-size:12px;padding:6px 12px;" onclick="dlWin()">⬇ setup_windows.ps1</button></p>
+      </details>
+
+      <details style="margin-top:8px;">
+        <summary>რას ააყენებს ეს ინსტალერი?</summary>
         <ul style="font-size:12.5px;color:var(--text-2);margin-top:6px;padding-left:18px;">
-          <li>Developer Mode (Registry)</li>
-          <li>WSL2, Hyper-V, VirtualMachinePlatform</li>
-          <li>Git, Node.js (winget)</li>
+          <li>Windows Developer Mode, WSL2, Hyper-V</li>
+          <li>Git, Node.js</li>
           <li>VS Code, Cursor, Claude Desktop, ChatGPT, Obsidian</li>
           <li>Claude Code CLI, Codex CLI, Grok CLI, Antigravity CLI</li>
         </ul>
       </details>
     </div>
+  </div>
 
-    <!-- Mac -->
-    <div class="dl-card">
-      <span class="dl-card-icon">🍎</span>
-      <h3>Mac</h3>
-      <p class="dl-desc">Bash სკრიპტი. ჩამოტვირთვის შემდეგ Terminal-ში:</p>
-      <div class="pre-wrap" style="margin:6px 0 12px;text-align:left;">
-        <pre style="font-size:11.5px;padding:9px 12px;"><code>chmod +x setup_mac.sh &amp;&amp; ./setup_mac.sh</code></pre>
-        <button class="copy-btn" onclick="copyPre(this)">copy</button>
-      </div>
-      <button class="btn btn-green btn-lg" onclick="dlMac()">⬇ &nbsp;setup_mac.sh</button>
-      <details style="margin-top:12px;text-align:left;">
+  <!-- ═══ MAC 1-LINE ═══ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="dl-card-icon" style="font-size:26px;margin:0;">🍎</span>
+      <span class="card-title">Mac — ერთ ბრძანებით ინსტალაცია</span>
+      <span class="badge bm" style="margin-left:auto;">რეკომენდებული</span>
+    </div>
+    <div class="card-body">
+      <p style="font-weight:700;font-size:13px;margin:2px 0 8px;">👇 ზუსტად მიყევით ამ ნაბიჯებს:</p>
+      <ol class="step-list">
+        <li>დააჭირეთ ქვემოთ <strong>📋 კოპირება</strong> ღილაკს — ბრძანება დაკოპირდება.
+          <div class="pre-wrap" style="margin:8px 0 2px;"><pre style="font-size:11px;"><code>curl -fsSL https://coinmania-ai-pulse-training.vercel.app/setup_mac.sh -o ~/coinmania_setup.sh && bash ~/coinmania_setup.sh</code></pre><button class="copy-btn" onclick="copyPre(this)">📋 კოპირება</button></div>
+        </li>
+        <li>გახსენით <strong>Terminal</strong>: დააჭირეთ <code>⌘ + Space</code>, ჩაწერეთ <code>Terminal</code> და დააჭირეთ <code>Enter</code>.</li>
+        <li>ჩასვით ბრძანება: დააჭირეთ <code>⌘ + V</code>, შემდეგ <code>Enter</code>.</li>
+        <li>თუ მოგთხოვთ პაროლს — აკრიფეთ <strong>თქვენი Mac-ის პაროლი</strong> და დააჭირეთ <code>Enter</code>. <br><span style="color:var(--danger);font-weight:600;">⚠️ აკრეფისას სიმბოლოები არ გამოჩნდება — ეს ნორმალურია, უბრალოდ აკრიფეთ და დააჭირეთ Enter.</span></li>
+        <li>⏳ დაელოდეთ <strong>10–20 წუთი</strong>. თუ სადმე მოგთხოვთ დადასტურებას — აკრიფეთ <code>y</code> და <code>Enter</code>.</li>
+        <li>ბოლოს დაინახავთ შედეგს. <strong>მზადაა! ✅</strong></li>
+      </ol>
+
+      <details style="margin-top:10px;">
         <summary>რას ააყენებს?</summary>
         <ul style="font-size:12.5px;color:var(--text-2);margin-top:6px;padding-left:18px;">
-          <li>Xcode Command Line Tools</li>
-          <li>Homebrew (პაკეტ-მენეჯერი)</li>
-          <li>Git, Node.js LTS</li>
-          <li>VS Code, Cursor, Claude Desktop, ChatGPT, Obsidian (cask)</li>
+          <li>Xcode Command Line Tools, Homebrew</li>
+          <li>Git, Node.js</li>
+          <li>VS Code, Cursor, Claude Desktop, ChatGPT, Obsidian</li>
           <li>Claude Code CLI, Codex CLI, Grok CLI, Antigravity CLI</li>
         </ul>
       </details>
     </div>
   </div>
 
-  <div class="callout c-warn">
+  <div class="callout c-warn" style="margin-top:18px;">
     <span class="callout-icon">⚠️</span>
     <div>
-      <strong>რაიმე ვერ დაყენდა?</strong> — ნორმალურია. ზოგი CLI შეიძლება განახლდეს. გამოიყენეთ ზემოთ მოცემული <a href="#step3" class="il">მანუალური ინსტრუქცია (ნაბიჯი 3)</a> ან დაუკავშირდით <strong>გიორგი ამირიძეს</strong> ან <strong>სულხან ჯაშს</strong>.
+      <strong>ავტომატური ინსტალაცია ვერ დაასრულა რამე?</strong> — ეს ნორმალურია. დარჩენილი პროგრამები ხელით დააყენეთ <a href="#step2" class="il">ნაბიჯი 2-დან</a>, ან იხილეთ <a href="#help" class="il">🆘 გავრცელებული პრობლემები</a> ქვემოთ.<br>
+      <span style="font-size:12.5px;color:var(--text-2);margin-top:3px;display:block;">💡 ანგარიშების შექმნა და Team-ში დამატება მაინც ხელით უნდა გააკეთოთ — იხ. <a href="#step4" class="il">ნაბიჯი 4</a>.</span>
     </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     TROUBLESHOOTING
+════════════════════════════════════════════ -->
+<div class="divider"><span>🆘 გავრცელებული პრობლემები</span></div>
+
+<div class="card" id="help">
+  <div class="card-head">
+    <span class="dl-card-icon" style="font-size:24px;margin:0;">🆘</span>
+    <span class="card-title">თუ რამე ვერ გამოვიდა — აქ ნახავთ გამოსავალს</span>
+  </div>
+  <div class="card-body">
+    <p class="muted" style="margin-bottom:12px;">დააჭირეთ პრობლემას, რომელსაც წააწყდით — გაიხსნება გამოსავალი:</p>
+
+    <details>
+      <summary>🪟 „Windows protected your PC" — ლურჯი ფანჯარა</summary>
+      <p style="font-size:13px;">ეს Windows-ის ჩვეული გაფრთხილებაა. დააჭირეთ <strong>More info</strong>, შემდეგ გამოჩნდება ღილაკი <strong>Run anyway</strong> — დააჭირეთ მას. ფაილი უსაფრთხოა.</p>
+    </details>
+
+    <details>
+      <summary>🪟 ბრაუზერმა ფაილი დაბლოკა / წაშალა („.bat can harm…")</summary>
+      <p style="font-size:13px;">ბრაუზერი ფრთხილობს, რადგან ეს ინსტალაციის ფაილია. ჩამოტვირთვების სიაში იპოვეთ ფაილი, დააჭირეთ <strong>⋯ (სამი წერტილი)</strong> ან ისარს გვერდით → <strong>Keep / შენახვა</strong> → <strong>Keep anyway</strong>.</p>
+    </details>
+
+    <details>
+      <summary>🪟 „Yes" ღილაკი ვერ დავაჭირე (გამონაცრისფერებულია / ითხოვს პაროლს)</summary>
+      <p style="font-size:13px;">თქვენს ანგარიშს არ აქვს ადმინისტრატორის უფლება ამ კომპიუტერზე. დაუკავშირდით <strong>გიორგი ამირიძეს</strong> ან <strong>სულხან ჯაშს</strong> — ისინი დაგეხმარებიან.</p>
+    </details>
+
+    <details>
+      <summary>🪟 „running scripts is disabled on this system"</summary>
+      <p style="font-size:13px;">ეს ხდება, თუ სკრიპტს პირდაპირ უშვებთ. <strong>გამოსავალი:</strong> გამოიყენეთ <strong>install_windows.bat</strong> ინსტალერი (ზემოთ) — ის ავტომატურად უვლის ამ შეზღუდვას.</p>
+    </details>
+
+    <details>
+      <summary>🪟 ფანჯარა მაშინვე იხურება / არაფერი ხდება</summary>
+      <p style="font-size:13px;">დარწმუნდით, რომ იყენებთ <strong>install_windows.bat</strong> ფაილს (და არა პირდაპირ .ps1-ს). თუ .bat-იც არ იხსნება — მარჯვენა კლიკი ფაილზე → <strong>Run as administrator</strong>. თუ მაინც არ ეშვება, დაუკავშირდით გიორგის ან სულხანს.</p>
+    </details>
+
+    <details>
+      <summary>🪟 „winget is not recognized" ან პროგრამები ვერ დაყენდა</summary>
+      <p style="font-size:13px;">Microsoft Store-ში მოძებნეთ და დააინსტალირეთ <strong>„App Installer"</strong>, შემდეგ თავიდან გაუშვით ინსტალერი. ან დააინსტალირეთ დარჩენილი პროგრამები ხელით <a href="#step2" class="il">ნაბიჯი 2-დან</a>.</p>
+    </details>
+
+    <details>
+      <summary>🍎 Mac: „command not found: brew" ინსტალაციის შემდეგ</summary>
+      <p style="font-size:13px;"><strong>დახურეთ Terminal სრულად</strong> (⌘+Q) და თავიდან გახსენით, შემდეგ ისევ გაუშვით ბრძანება. ეს განაახლებს გარემოს.</p>
+    </details>
+
+    <details>
+      <summary>🍎 Mac: პაროლი ვერ ვწერ (არაფერი ჩანს)</summary>
+      <p style="font-size:13px;">ეს <strong>განზრახ</strong>აა — Terminal პაროლის აკრეფისას სიმბოლოებს არ აჩვენებს უსაფრთხოებისთვის. უბრალოდ აკრიფეთ თქვენი პაროლი (თითქოს ბრმად) და დააჭირეთ <code>Enter</code>.</p>
+    </details>
+
+    <details>
+      <summary>🍎 Mac: „xcode-select" ფანჯარა გამოვიდა</summary>
+      <p style="font-size:13px;">დააჭირეთ <strong>Install</strong> გამოსულ ფანჯარაში და დაელოდეთ დასრულებას. შემდეგ დაბრუნდით Terminal-ში და დააჭირეთ <code>Enter</code> გასაგრძელებლად.</p>
+    </details>
+
+    <details>
+      <summary>🛡️ ანტივირუსმა/კორპორატიულმა ქსელმა დაბლოკა</summary>
+      <p style="font-size:13px;">ზოგი ანტივირუსი ან სამსახურის ქსელი ბლოკავს ინსტალაციის ფაილებს. სცადეთ სხვა ინტერნეტ ქსელი (მაგ. მობილური), ან დააინსტალირეთ პროგრამები ხელით <a href="#step2" class="il">ნაბიჯი 2-დან</a>. საჭიროების შემთხვევაში დაუკავშირდით გიორგის ან სულხანს.</p>
+    </details>
+
+    <details>
+      <summary>❓ ვერაფერი მუშაობს / დავიბენი</summary>
+      <p style="font-size:13px;">არ ინერვიულოთ — დაუკავშირდით <strong>გიორგი ამირიძეს</strong> ან <strong>სულხან ჯაშს</strong> და ერთად გავაკეთებთ. შეგიძლიათ ასევე მთლიანად ხელით მიყვეთ <a href="#step2" class="il">ნაბიჯებს ზემოთ</a> — ისინი დეტალურადაა ახსნილი.</p>
+    </details>
   </div>
 </div>
 
@@ -763,12 +889,12 @@ try { chcp 65001 > $null; [Console]::OutputEncoding = [System.Text.Encoding]::UT
 # ავტომატური ელევაცია ადმინისტრატორამდე (ასწორებს გაშვებისთანავე ჩაკეტვას)
 $principal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
 if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    if ([string]::IsNullOrEmpty($PSCommandPath)) {
-        Write-Host "  ❌ გთხოვთ გაუშვათ ფაილი: მარჯვენა კლიკი -> Run with PowerShell" -ForegroundColor Yellow
-        Read-Host "  Enter-ი გასასვლელად"; exit 1
-    }
     try {
-        Start-Process powershell.exe -Verb RunAs -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-File',"`"$PSCommandPath`"")
+        if ([string]::IsNullOrEmpty($PSCommandPath)) {
+            Start-Process powershell.exe -Verb RunAs -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-Command',"iex (irm 'https://coinmania-ai-pulse-training.vercel.app/setup_windows.ps1')")
+        } else {
+            Start-Process powershell.exe -Verb RunAs -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-File',"`"$PSCommandPath`"")
+        }
     } catch {
         Write-Host "  ⚠️  UAC მოთხოვნა უარყოფილია. სკრიპტს ადმინისტრატორის უფლებები სჭირდება." -ForegroundColor Red
         Read-Host "  Enter-ი გასასვლელად"
@@ -1095,6 +1221,43 @@ echo -e "  ${GRAY}  📞 კითხვები: გიორგი ამი�
 echo
 </script>
 
+<script type="text/plain" id="bat-data">
+@echo off
+chcp 65001 >nul
+title Coinmania - AI Training Setup
+color 0B
+
+:: ============================================================
+::  Coinmania AI Training - 1-click installer (Windows)
+::  Double-click this file. It asks for admin (UAC) and then
+::  downloads + runs the latest installer automatically.
+:: ============================================================
+
+:: --- Step 1: self-elevate to Administrator (UAC) ---
+net session >nul 2>&1
+if %errorlevel% neq 0 (
+    echo.
+    echo   Administrator permission is required.
+    echo   Please click "Yes" on the popup window...
+    echo.
+    powershell -NoProfile -Command "Start-Process -FilePath '%~f0' -Verb RunAs" >nul 2>&1
+    exit /b
+)
+
+:: --- Step 2: run the installer straight from the web ---
+echo.
+echo   ============================================================
+echo      Coinmania - AI Training Setup
+echo      Downloading and starting the installer...
+echo   ============================================================
+echo.
+
+powershell -NoProfile -ExecutionPolicy Bypass -Command ^
+  "[Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12; $ProgressPreference='SilentlyContinue'; try { $s = Invoke-RestMethod 'https://coinmania-ai-pulse-training.vercel.app/setup_windows.ps1'; if ($s.Length -gt 0 -and $s[0] -eq [char]0xFEFF) { $s = $s.Substring(1) }; Invoke-Expression $s } catch { Write-Host ''; Write-Host ('  ERROR: ' + $_.Exception.Message) -ForegroundColor Red; Write-Host '  Check your internet connection and try again,' -ForegroundColor Yellow; Write-Host '  or use the manual steps on the website.' -ForegroundColor Yellow; Write-Host ''; Read-Host '  Press Enter to close' }"
+
+exit /b
+</script>
+
 <!-- ════════════════════════════════════════════
      JAVASCRIPT
 ════════════════════════════════════════════ -->
@@ -1135,19 +1298,23 @@ function chk(li) {
 }
 
 // ── File download from text/plain tag ──
-// bom=true prepends a UTF-8 BOM so Windows PowerShell 5.1 reads Georgian
-// correctly. NEVER add a BOM to the .sh — it would break the shebang line.
-function dlFile(id, filename, bom) {
+// opts.bom  → prepend UTF-8 BOM (PowerShell 5.1 reads Georgian correctly).
+//             NEVER on .sh (breaks the shebang) or .bat (cmd chokes on BOM).
+// opts.crlf → CRLF line endings (Windows .ps1/.bat). Leave off for .sh (LF).
+function dlFile(id, filename, opts) {
+  opts = opts || {};
   let src = document.getElementById(id).textContent.trim() + '\n';
-  if (bom) src = String.fromCharCode(0xFEFF) + src;
+  if (opts.crlf) src = src.replace(/\r?\n/g, '\r\n');
+  if (opts.bom)  src = String.fromCharCode(0xFEFF) + src;
   const blob = new Blob([src], { type: 'text/plain;charset=utf-8' });
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
   a.href = url; a.download = filename; document.body.appendChild(a);
   a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
 }
-function dlWin() { dlFile('win-data', 'setup_windows.ps1', true); }
-function dlMac() { dlFile('mac-data', 'setup_mac.sh', false); }
+function dlBat() { dlFile('bat-data', 'install_windows.bat', {crlf:true}); }
+function dlWin() { dlFile('win-data', 'setup_windows.ps1', {bom:true, crlf:true}); }
+function dlMac() { dlFile('mac-data', 'setup_mac.sh', {}); }
 </script>
 </body>
 </html>

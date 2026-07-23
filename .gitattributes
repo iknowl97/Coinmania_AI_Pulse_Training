@@ -4,6 +4,9 @@
 # Keep the PowerShell script CRLF for Windows (UTF-8 BOM is preserved as content)
 *.ps1  text eol=crlf
 
+# Keep the batch launcher CRLF for cmd.exe
+*.bat  text eol=crlf
+
 # Web assets: LF
 *.html text eol=lf
 *.json text eol=lf

@@ -2,6 +2,13 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "headers": [
     {
+      "source": "/install_windows.bat",
+      "headers": [
+        { "key": "Content-Type", "value": "text/plain; charset=utf-8" },
+        { "key": "Content-Disposition", "value": "attachment; filename=\"install_windows.bat\"" }
+      ]
+    },
+    {
       "source": "/setup_windows.ps1",
       "headers": [
         {

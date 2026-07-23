@@ -21,13 +21,14 @@ try { chcp 65001 > $null; [Console]::OutputEncoding = [System.Text.Encoding]::UT
 # ──────────────────────────────────────────────
 $principal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
 if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    if ([string]::IsNullOrEmpty($PSCommandPath)) {
-        Write-Host ""
-        Write-Host "  ❌ გთხოვთ გაუშვათ ფაილი: მარჯვენა კლიკი -> Run with PowerShell" -ForegroundColor Yellow
-        Read-Host "  Enter-ი გასასვლელად"; exit 1
-    }
     try {
-        Start-Process powershell.exe -Verb RunAs -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-File',"`"$PSCommandPath`"")
+        if ([string]::IsNullOrEmpty($PSCommandPath)) {
+            # ვებიდან გაშვება (irm | iex) — ხელახლა ჩამოტვირთვით ვხსნით ადმინისტრატორად
+            Start-Process powershell.exe -Verb RunAs -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-Command',"iex (irm 'https://coinmania-ai-pulse-training.vercel.app/setup_windows.ps1')")
+        } else {
+            # ფაილიდან გაშვება — იმავე ფაილს ვხსნით ადმინისტრატორად
+            Start-Process powershell.exe -Verb RunAs -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-File',"`"$PSCommandPath`"")
+        }
     } catch {
         Write-Host ""
         Write-Host "  ⚠️  UAC მოთხოვნა უარყოფილია. სკრიპტს ადმინისტრატორის უფლებები სჭირდება." -ForegroundColor Red
