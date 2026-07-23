@@ -4,16 +4,29 @@
     {
       "source": "/setup_windows.ps1",
       "headers": [
-        { "key": "Content-Type", "value": "text/plain; charset=utf-8" },
-        { "key": "Content-Disposition", "value": "attachment; filename=\"setup_windows.ps1\"" }
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "attachment; filename=\"setup_windows.ps1\""
+        }
       ]
     },
     {
       "source": "/setup_mac.sh",
       "headers": [
-        { "key": "Content-Type", "value": "text/plain; charset=utf-8" },
-        { "key": "Content-Disposition", "value": "attachment; filename=\"setup_mac.sh\"" }
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "attachment; filename=\"setup_mac.sh\""
+        }
       ]
     }
-  ]
+  ],
+  "//": "Coinmania AI training static site"
 }
