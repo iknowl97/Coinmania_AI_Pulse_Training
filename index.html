@@ -360,12 +360,11 @@ main { padding-bottom: 60px; }
   <nav class="nav-bar">
     <div class="wrap">
       <div class="nav-inner">
-        <a href="#auto"     class="nav-link accent">✨ 1-კლიკ ინსტალაცია</a>
-        <a href="#step2"    class="nav-link">📦 ხელით: პროგრამები</a>
-        <a href="#step3"    class="nav-link">🛠️ ხელით: CLI</a>
-        <a href="#step4"    class="nav-link">🔑 ანგარიშები</a>
+        <a href="#auto"      class="nav-link accent">✨ 1-კლიკ ინსტალაცია</a>
+        <a href="#accounts"  class="nav-link">🔑 ანგარიშები</a>
+        <a href="#manual"    class="nav-link">📖 ხელით ინსტალაცია</a>
         <a href="#checklist" class="nav-link">✅ ჩეკლისტი</a>
-        <a href="#help"     class="nav-link accent">🆘 დახმარება</a>
+        <a href="#help"      class="nav-link accent">🆘 დახმარება</a>
       </div>
     </div>
   </nav>
@@ -387,24 +386,170 @@ main { padding-bottom: 60px; }
 <div class="wrap">
 
 <!-- ════════════════════════════════════════════
-     TOP CTA → 1-CLICK
+     AUTO INSTALL  (primary path)
 ════════════════════════════════════════════ -->
-<a href="#auto" style="text-decoration:none;display:block;">
-  <div class="card" style="background:linear-gradient(135deg,#0CC47D 0%,#0A8F5A 100%);border:none;margin-top:6px;">
-    <div class="card-body" style="text-align:center;padding:22px;">
-      <div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:4px;">✨ ყველაზე მარტივი გზა — 1 კლიკით ინსტალაცია</div>
-      <div style="font-size:13px;color:#fff;opacity:.92;">დააჭირეთ აქ → ავტომატურად დაყენდება ყველა პროგრამა. ტექნიკური ცოდნა არ გჭირდებათ. 👇</div>
+<div class="section-label" style="margin-top:24px;">ნაბიჯი 1 — პროგრამების ინსტალაცია</div>
+
+<div id="auto">
+  <div class="callout c-brand" style="margin-bottom:14px;">
+    <span class="callout-icon">✨</span>
+    <div>
+      <strong>ეს არის ყველაზე მარტივი გზა.</strong> აირჩიეთ თქვენი კომპიუტერი (Windows ან Mac) და მიყევით ნაბიჯებს ზუსტად ისე, როგორც წერია — ყველა პროგრამა ავტომატურად დაყენდება.<br>
+      <span style="font-size:12.5px;color:var(--text-2);margin-top:4px;display:block;">📌 <strong>ტექნიკური ცოდნა არ გჭირდებათ.</strong> უბრალოდ დააჭირეთ ღილაკებს, როგორც ქვემოთ არის ახსნილი.</span>
     </div>
   </div>
-</a>
+
+  <div class="callout c-warn" style="margin-bottom:18px;align-items:center;">
+    <span class="callout-icon">🛟</span>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;width:100%;">
+      <span style="flex:1;min-width:200px;">რომელიმე ეტაპი ვერ გამოვიდა ან შეცდომა მოგივიდათ? — გადადით ხელით, დეტალურ ინსტრუქციაზე.</span>
+      <a href="#manual" class="btn btn-ghost" style="font-size:13px;">📖 ხელით ინსტრუქციაზე გადასვლა ↓</a>
+    </div>
+  </div>
+
+  <!-- ═══ WINDOWS 1-CLICK ═══ -->
+  <div class="card" style="margin-bottom:18px;">
+    <div class="card-head">
+      <span class="dl-card-icon" style="font-size:26px;margin:0;">🪟</span>
+      <span class="card-title">Windows — 1 კლიკით ინსტალაცია</span>
+      <span class="badge bw" style="margin-left:auto;">რეკომენდებული</span>
+    </div>
+    <div class="card-body">
+      <div style="text-align:center;margin-bottom:16px;">
+        <button class="btn btn-blue btn-lg" onclick="dlBat()">⬇ &nbsp;ჩამოტვირთეთ Windows ინსტალერი</button>
+        <p style="font-size:11.5px;color:var(--text-3);margin-top:6px;">ფაილი: <code>install_windows.bat</code> — პატარა, უსაფრთხო ფაილი</p>
+      </div>
+
+      <p style="font-weight:700;font-size:13px;margin:6px 0 8px;">👇 ჩამოტვირთვის შემდეგ, ზუსტად მიყევით ამ ნაბიჯებს:</p>
+      <ol class="step-list">
+        <li>ზემოთ დააჭირეთ ლურჯ ღილაკს — ჩამოიტვირთება ფაილი <code>install_windows.bat</code>.</li>
+        <li>ბრაუზერმა შეიძლება გაჩვენოთ გაფრთხილება (მაგ. <em>„install_windows.bat is not commonly downloaded"</em>). დააჭირეთ <strong>⋯ (სამი წერტილი) → Keep / შენახვა</strong>, შემდეგ <strong>Keep anyway</strong>. ⚠️ ეს ფაილი უსაფრთხოა.</li>
+        <li>გახსენით ჩამოტვირთვების საქაღალდე: დააჭირეთ კლავიშებს <code>Ctrl + J</code> (ან ბრაუზერის ზედა მარჯვენა კუთხეში ↓ ისარს) და იპოვეთ <code>install_windows.bat</code>.</li>
+        <li><strong>ორმაგად დააწკაპუნეთ</strong> ფაილზე <code>install_windows.bat</code>.</li>
+        <li>თუ გამოვა ლურჯი ფანჯარა <em>„Windows protected your PC"</em> — დააჭირეთ <strong>More info</strong>, შემდეგ <strong>Run anyway</strong>.</li>
+        <li>გამოვა ფანჯარა <em>„Do you want to allow this app to make changes?"</em> — დააჭირეთ <strong>Yes</strong>. <span style="color:var(--text-2)">(ეს აძლევს ინსტალერს უფლებას დააყენოს პროგრამები.)</span></li>
+        <li>გაიხსნება მუქი ფანჯარა და დაგისვამთ კითხვას — აკრიფეთ <code>Y</code> და დააჭირეთ <code>Enter</code>. <span style="color:var(--text-2)">(ფანჯრის ტექსტი ინგლისურადაა — ეს ნორმალურია.)</span></li>
+        <li>⏳ დაელოდეთ <strong>10–20 წუთი</strong> (ინტერნეტის სიჩქარეზეა დამოკიდებული). დაინახავთ, როგორ ყენდება პროგრამები ერთმანეთის მიყოლებით.</li>
+        <li>ბოლოს დაინახავთ შედეგს (მაგ. „7 / 7"). დააჭირეთ <code>Enter</code> ფანჯრის დასახურად. <strong>მზადაა! ✅</strong></li>
+      </ol>
+
+      <div class="callout c-info" style="margin-top:12px;">
+        <span class="callout-icon">💡</span>
+        <div>თუ ინსტალაციის ბოლოს დაგისვამთ კითხვას გადატვირთვაზე (<em>restart</em>) — აკრიფეთ <code>Y</code> და გადატვირთეთ კომპიუტერი. ეს საჭიროა WSL-ისთვის.</div>
+      </div>
+
+      <details style="margin-top:10px;">
+        <summary>ალტერნატივა (გამოცდილი მომხმარებლებისთვის): ერთი ბრძანება</summary>
+        <p style="font-size:12.5px;color:var(--text-2);margin:6px 0;">გახსენით <strong>PowerShell</strong> (Admin) და ჩასვით:</p>
+        <div class="pre-wrap"><pre style="font-size:11px;"><code>powershell -ExecutionPolicy Bypass -Command "iex (irm https://coinmania-ai-pulse-training.vercel.app/setup_windows.ps1)"</code></pre><button class="copy-btn" onclick="copyPre(this)">copy</button></div>
+        <p style="font-size:12px;color:var(--text-2);margin-top:8px;">ან ჩამოტვირთეთ სკრიპტი პირდაპირ: <button class="btn btn-ghost" style="font-size:12px;padding:6px 12px;" onclick="dlWin()">⬇ setup_windows.ps1</button></p>
+      </details>
+
+      <details style="margin-top:8px;">
+        <summary>რას ააყენებს ეს ინსტალერი?</summary>
+        <ul style="font-size:12.5px;color:var(--text-2);margin-top:6px;padding-left:18px;">
+          <li>Windows Developer Mode, WSL2, Hyper-V</li>
+          <li>Git, Node.js</li>
+          <li>VS Code, Cursor, Claude Desktop, ChatGPT, Obsidian</li>
+          <li>Claude Code CLI, Codex CLI, Grok CLI, Antigravity CLI</li>
+        </ul>
+      </details>
+    </div>
+  </div>
+
+  <!-- ═══ MAC 1-LINE ═══ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="dl-card-icon" style="font-size:26px;margin:0;">🍎</span>
+      <span class="card-title">Mac — ერთ ბრძანებით ინსტალაცია</span>
+      <span class="badge bm" style="margin-left:auto;">რეკომენდებული</span>
+    </div>
+    <div class="card-body">
+      <p style="font-weight:700;font-size:13px;margin:2px 0 8px;">👇 ზუსტად მიყევით ამ ნაბიჯებს:</p>
+      <ol class="step-list">
+        <li>დააჭირეთ ქვემოთ <strong>📋 კოპირება</strong> ღილაკს — ბრძანება დაკოპირდება.
+          <div class="pre-wrap" style="margin:8px 0 2px;"><pre style="font-size:11px;"><code>curl -fsSL https://coinmania-ai-pulse-training.vercel.app/setup_mac.sh -o ~/coinmania_setup.sh && bash ~/coinmania_setup.sh</code></pre><button class="copy-btn" onclick="copyPre(this)">📋 კოპირება</button></div>
+        </li>
+        <li>გახსენით <strong>Terminal</strong>: დააჭირეთ <code>⌘ + Space</code>, ჩაწერეთ <code>Terminal</code> და დააჭირეთ <code>Enter</code>.</li>
+        <li>ჩასვით ბრძანება: დააჭირეთ <code>⌘ + V</code>, შემდეგ <code>Enter</code>.</li>
+        <li>თუ მოგთხოვთ პაროლს — აკრიფეთ <strong>თქვენი Mac-ის პაროლი</strong> და დააჭირეთ <code>Enter</code>. <br><span style="color:var(--danger);font-weight:600;">⚠️ აკრეფისას სიმბოლოები არ გამოჩნდება — ეს ნორმალურია, უბრალოდ აკრიფეთ და დააჭირეთ Enter.</span></li>
+        <li>⏳ დაელოდეთ <strong>10–20 წუთი</strong>. თუ სადმე მოგთხოვთ დადასტურებას — აკრიფეთ <code>y</code> და <code>Enter</code>.</li>
+        <li>ბოლოს დაინახავთ შედეგს. <strong>მზადაა! ✅</strong></li>
+      </ol>
+
+      <details style="margin-top:10px;">
+        <summary>რას ააყენებს?</summary>
+        <ul style="font-size:12.5px;color:var(--text-2);margin-top:6px;padding-left:18px;">
+          <li>Xcode Command Line Tools, Homebrew</li>
+          <li>Git, Node.js</li>
+          <li>VS Code, Cursor, Claude Desktop, ChatGPT, Obsidian</li>
+          <li>Claude Code CLI, Codex CLI, Grok CLI, Antigravity CLI</li>
+        </ul>
+      </details>
+    </div>
+  </div>
+
+  <div class="callout c-warn" style="margin-top:18px;">
+    <span class="callout-icon">⚠️</span>
+    <div>
+      <strong>ავტომატური ინსტალაცია ვერ დაასრულა რამე?</strong> — ეს ნორმალურია. დარჩენილი პროგრამები ხელით დააყენეთ <a href="#manual" class="il">ხელით ინსტრუქციიდან</a>, ან იხილეთ <a href="#help" class="il">🆘 გავრცელებული პრობლემები</a> ქვემოთ.<br>
+      <span style="font-size:12.5px;color:var(--text-2);margin-top:3px;display:block;">💡 პროგრამების დაყენების შემდეგ, გადადით ქვემოთ — <a href="#accounts" class="il">🔑 ანგარიშების შექმნაზე</a>.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     STEP 2 — ACCOUNTS
+════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:32px;">ნაბიჯი 2 — ანგარიშების შექმნა</div>
+<div class="card" id="accounts">
+  <div class="card-head">
+    <div class="step-num">🔑</div>
+    <span class="card-title">ანგარიშების მომზადება</span>
+  </div>
+  <div class="card-body">
+
+    <h3 class="sub">🏢 Claude Team &amp; ChatGPT Team — გუნდური ანგარიშები</h3>
+    <p class="muted">ინდივიდუალური რეგისტრაცია <strong>არ</strong> გჭირდებათ:</p>
+    <ol class="step-list">
+      <li>გაუგზავნეთ <code>@coinmania.ge</code> მეილი <strong>გიორგი ამირიძეს</strong> ან <strong>სულხან ჯაშს</strong></li>
+      <li>ისინი დაგამატებენ გუნდში</li>
+      <li>მეილზე მოგივათ მოწვევა — მიყევით ინსტრუქციას</li>
+    </ol>
+
+    <h3 class="sub">📧 Google Gemini &amp; NotebookLM</h3>
+    <p class="muted" style="margin-bottom:10px;">წვდომა უკვე გაქვთ <code>@coinmania.ge</code> ანგარიშით:</p>
+    <div style="display:flex;gap:9px;flex-wrap:wrap;">
+      <a href="https://gemini.google.com/" target="_blank" class="btn btn-ghost" style="font-size:13px;padding:8px 16px;">↗ gemini.google.com</a>
+      <a href="https://notebooklm.google.com/" target="_blank" class="btn btn-ghost" style="font-size:13px;padding:8px 16px;">↗ notebooklm.google.com</a>
+    </div>
+
+    <h3 class="sub">🌐 სხვა AI სერვისები — დააჭირეთ Sign Up</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>სერვისი</th><th>ბმული</th><th>შენიშვნა</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Grok</strong></td><td><a href="https://grok.com/" target="_blank">↗ grok.com</a></td><td style="color:var(--text-2)">X (Twitter) ან Google</td></tr>
+          <tr><td><strong>Perplexity</strong></td><td><a href="https://www.perplexity.ai/" target="_blank">↗ perplexity.ai</a></td><td style="color:var(--text-2)">Google-ით შეიძლება</td></tr>
+          <tr><td><strong>Kimi</strong></td><td><a href="https://kimi.moonshot.cn/" target="_blank">↗ kimi.moonshot.cn</a></td><td style="color:var(--text-2)">Google-ით შეიძლება</td></tr>
+          <tr><td><strong>Minimax</strong></td><td><a href="https://www.minimaxi.com/" target="_blank">↗ minimaxi.com</a></td><td style="color:var(--text-2)">Google-ით შეიძლება</td></tr>
+          <tr><td><strong>DeepSeek</strong></td><td><a href="https://www.deepseek.com/" target="_blank">↗ deepseek.com</a></td><td style="color:var(--text-2)">Google-ით შეიძლება</td></tr>
+          <tr><td><strong>Qwen</strong></td><td><a href="https://chat.qwenlm.ai/" target="_blank">↗ chat.qwenlm.ai</a></td><td style="color:var(--text-2)">Google-ით შეიძლება</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
 <!-- ════════════════════════════════════════════
      MANUAL INSTRUCTIONS (detailed fallback)
 ════════════════════════════════════════════ -->
-<div class="section-label">ან — ხელით ინსტალაცია (დეტალური ინსტრუქცია)</div>
+<div class="section-label" id="manual" style="margin-top:32px;">ხელით ინსტალაცია — დეტალური ინსტრუქცია (სათადარიგო)</div>
 <div class="callout c-info" style="margin-bottom:14px;">
   <span class="callout-icon">ℹ️</span>
-  <div>ეს ნაწილი გჭირდებათ მხოლოდ იმ შემთხვევაში, თუ ავტომატური 1-კლიკ ინსტალაცია რატომღაც ვერ დასრულდა. სხვა შემთხვევაში პირდაპირ გადადით <a href="#auto" class="il">✨ 1-კლიკ ინსტალაციაზე</a>.</div>
+  <div>ეს ნაწილი გჭირდებათ <strong>მხოლოდ იმ შემთხვევაში</strong>, თუ ზემოთ ავტომატური ინსტალაცია რომელიმე პროგრამაზე ვერ დასრულდა. თითოეული ნაბიჯი დეტალურადაა ახსნილი. სხვა შემთხვევაში დაბრუნდით <a href="#auto" class="il">✨ ავტომატურ ინსტალაციაზე</a>.</div>
 </div>
 
 <!-- HOW TO OPEN TERMINAL -->
@@ -608,48 +753,6 @@ main { padding-bottom: 60px; }
   </div>
 </div>
 
-<!-- STEP 4: Accounts -->
-<div class="card" id="step4">
-  <div class="card-head">
-    <div class="step-num">4</div>
-    <span class="card-title">ანგარიშების მომზადება</span>
-  </div>
-  <div class="card-body">
-
-    <h3 class="sub">🏢 Claude Team &amp; ChatGPT Team — გუნდური ანგარიშები</h3>
-    <p class="muted">ინდივიდუალური რეგისტრაცია <strong>არ</strong> გჭირდებათ:</p>
-    <ol class="step-list">
-      <li>გაუგზავნეთ <code>@coinmania.ge</code> მეილი <strong>გიორგი ამირიძეს</strong> ან <strong>სულხან ჯაშს</strong></li>
-      <li>ისინი დაგამატებენ გუნდში</li>
-      <li>მეილზე მოგივათ მოწვევა — მიყევით ინსტრუქციას</li>
-    </ol>
-
-    <h3 class="sub">📧 Google Gemini &amp; NotebookLM</h3>
-    <p class="muted" style="margin-bottom:10px;">წვდომა უკვე გაქვთ <code>@coinmania.ge</code> ანგარიშით:</p>
-    <div style="display:flex;gap:9px;flex-wrap:wrap;">
-      <a href="https://gemini.google.com/" target="_blank" class="btn btn-ghost" style="font-size:13px;padding:8px 16px;">↗ gemini.google.com</a>
-      <a href="https://notebooklm.google.com/" target="_blank" class="btn btn-ghost" style="font-size:13px;padding:8px 16px;">↗ notebooklm.google.com</a>
-    </div>
-
-    <h3 class="sub">🌐 სხვა AI სერვისები — დააჭირეთ Sign Up</h3>
-    <div class="tbl-wrap">
-      <table>
-        <thead>
-          <tr><th>სერვისი</th><th>ბმული</th><th>შენიშვნა</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Grok</strong></td><td><a href="https://grok.com/" target="_blank">↗ grok.com</a></td><td style="color:var(--text-2)">X (Twitter) ან Google</td></tr>
-          <tr><td><strong>Perplexity</strong></td><td><a href="https://www.perplexity.ai/" target="_blank">↗ perplexity.ai</a></td><td style="color:var(--text-2)">Google-ით შეიძლება</td></tr>
-          <tr><td><strong>Kimi</strong></td><td><a href="https://kimi.moonshot.cn/" target="_blank">↗ kimi.moonshot.cn</a></td><td style="color:var(--text-2)">Google-ით შეიძლება</td></tr>
-          <tr><td><strong>Minimax</strong></td><td><a href="https://www.minimaxi.com/" target="_blank">↗ minimaxi.com</a></td><td style="color:var(--text-2)">Google-ით შეიძლება</td></tr>
-          <tr><td><strong>DeepSeek</strong></td><td><a href="https://www.deepseek.com/" target="_blank">↗ deepseek.com</a></td><td style="color:var(--text-2)">Google-ით შეიძლება</td></tr>
-          <tr><td><strong>Qwen</strong></td><td><a href="https://chat.qwenlm.ai/" target="_blank">↗ chat.qwenlm.ai</a></td><td style="color:var(--text-2)">Google-ით შეიძლება</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
 <!-- CHECKLIST -->
 <div class="card" id="checklist">
   <div class="card-head">
@@ -668,122 +771,17 @@ main { padding-bottom: 60px; }
       <li onclick="chk(this)"><span class="check-box"></span><span class="check-text">Claude Desktop დაინსტალირებულია</span></li>
       <li onclick="chk(this)"><span class="check-box"></span><span class="check-text">ChatGPT Desktop დაინსტალირებულია</span></li>
       <li onclick="chk(this)"><span class="check-box"></span><span class="check-text">Git დაინსტალირებულია</span></li>
-      <li onclick="chk(this)"><span class="check-box"></span><span class="check-text">Node.js LTS დაინსტალირებულია</span></li>
+      <li onclick="chk(this)"><span class="check-box"></span><span class="check-text">Node.js დაინსტალირებულია</span></li>
       <li onclick="chk(this)"><span class="check-box"></span><span class="check-text">Obsidian დაინსტალირებულია</span></li>
       <li onclick="chk(this)"><span class="check-box"></span><span class="check-text"><code>claude --version</code> — Claude Code CLI მუშაობს</span></li>
       <li onclick="chk(this)"><span class="check-box"></span><span class="check-text"><code>codex</code> — Codex CLI მუშაობს</span></li>
       <li onclick="chk(this)"><span class="check-box"></span><span class="check-text"><code>grok</code> — Grok CLI მუშაობს</span></li>
-      <li onclick="chk(this)"><span class="check-box"></span><span class="check-text"><code>antigravity</code> — Antigravity CLI მუშაობს</span></li>
+      <li onclick="chk(this)"><span class="check-box"></span><span class="check-text"><code>agy</code> — Antigravity CLI მუშაობს</span></li>
       <li onclick="chk(this)"><span class="check-box"></span><span class="check-text">🔑 Claude Team-ში ხართ დამატებული</span></li>
       <li onclick="chk(this)"><span class="check-box"></span><span class="check-text">🔑 ChatGPT Team-ში ხართ დამატებული</span></li>
       <li onclick="chk(this)"><span class="check-box"></span><span class="check-text">🔑 Google Gemini — შედიხართ <code>@coinmania.ge</code>-ით</span></li>
       <li onclick="chk(this)"><span class="check-box"></span><span class="check-text">🔑 Grok · Perplexity · Kimi · Minimax · DeepSeek · Qwen — ანგარიშები</span></li>
     </ul>
-  </div>
-</div>
-
-<!-- ════════════════════════════════════════════
-     AUTO INSTALL
-════════════════════════════════════════════ -->
-<div class="divider"><span>⚡ ავტომატური ინსტალაცია</span></div>
-
-<div id="auto">
-  <div class="callout c-brand" style="margin-bottom:18px;">
-    <span class="callout-icon">✨</span>
-    <div>
-      <strong>ეს არის ყველაზე მარტივი გზა.</strong> აირჩიეთ თქვენი კომპიუტერი (Windows ან Mac), მიყევით ნაბიჯებს ზუსტად ისე, როგორც წერია — და ყველა პროგრამა ავტომატურად დაყენდება.<br>
-      <span style="font-size:12.5px;color:var(--text-2);margin-top:4px;display:block;">📌 <strong>ტექნიკური ცოდნა არ გჭირდებათ.</strong> უბრალოდ დააჭირეთ ღილაკებს, როგორც ქვემოთ არის ახსნილი. თუ რამე ვერ გამოვიდა — იხილეთ <a href="#help" class="il">🆘 გავრცელებული პრობლემები</a>.</span>
-    </div>
-  </div>
-
-  <!-- ═══ WINDOWS 1-CLICK ═══ -->
-  <div class="card" style="margin-bottom:18px;">
-    <div class="card-head">
-      <span class="dl-card-icon" style="font-size:26px;margin:0;">🪟</span>
-      <span class="card-title">Windows — 1 კლიკით ინსტალაცია</span>
-      <span class="badge bw" style="margin-left:auto;">რეკომენდებული</span>
-    </div>
-    <div class="card-body">
-      <div style="text-align:center;margin-bottom:16px;">
-        <button class="btn btn-blue btn-lg" onclick="dlBat()">⬇ &nbsp;ჩამოტვირთეთ Windows ინსტალერი</button>
-        <p style="font-size:11.5px;color:var(--text-3);margin-top:6px;">ფაილი: <code>install_windows.bat</code> — პატარა, უსაფრთხო ფაილი</p>
-      </div>
-
-      <p style="font-weight:700;font-size:13px;margin:6px 0 8px;">👇 ჩამოტვირთვის შემდეგ, ზუსტად მიყევით ამ ნაბიჯებს:</p>
-      <ol class="step-list">
-        <li>ზემოთ დააჭირეთ ლურჯ ღილაკს — ჩამოიტვირთება ფაილი <code>install_windows.bat</code>.</li>
-        <li>ბრაუზერმა შეიძლება გაჩვენოთ გაფრთხილება (მაგ. <em>„install_windows.bat is not commonly downloaded"</em>). დააჭირეთ <strong>⋯ (სამი წერტილი) → Keep / შენახვა</strong>, შემდეგ <strong>Keep anyway</strong>. ⚠️ ეს ფაილი უსაფრთხოა.</li>
-        <li>გახსენით ჩამოტვირთვების საქაღალდე: დააჭირეთ კლავიშებს <code>Ctrl + J</code> (ან ბრაუზერის ზედა მარჯვენა კუთხეში ↓ ისარს) და იპოვეთ <code>install_windows.bat</code>.</li>
-        <li><strong>ორმაგად დააწკაპუნეთ</strong> ფაილზე <code>install_windows.bat</code>.</li>
-        <li>თუ გამოვა ლურჯი ფანჯარა <em>„Windows protected your PC"</em> — დააჭირეთ <strong>More info</strong>, შემდეგ <strong>Run anyway</strong>.</li>
-        <li>გამოვა ფანჯარა <em>„Do you want to allow this app to make changes?"</em> — დააჭირეთ <strong>Yes</strong>. <span style="color:var(--text-2)">(ეს აძლევს ინსტალერს უფლებას დააყენოს პროგრამები.)</span></li>
-        <li>გაიხსნება მუქი ფანჯარა და დაგისვამთ კითხვას — აკრიფეთ <code>Y</code> და დააჭირეთ <code>Enter</code>. <span style="color:var(--text-2)">(ფანჯრის ტექსტი ინგლისურადაა — ეს ნორმალურია.)</span></li>
-        <li>⏳ დაელოდეთ <strong>10–20 წუთი</strong> (ინტერნეტის სიჩქარეზეა დამოკიდებული). დაინახავთ, როგორ ყენდება პროგრამები ერთმანეთის მიყოლებით.</li>
-        <li>ბოლოს დაინახავთ შედეგს (მაგ. „7 / 7"). დააჭირეთ <code>Enter</code> ფანჯრის დასახურად. <strong>მზადაა! ✅</strong></li>
-      </ol>
-
-      <div class="callout c-info" style="margin-top:12px;">
-        <span class="callout-icon">💡</span>
-        <div>თუ ინსტალაციის ბოლოს დაგისვამთ კითხვას გადატვირთვაზე (<em>restart</em>) — აკრიფეთ <code>Y</code> და გადატვირთეთ კომპიუტერი. ეს საჭიროა WSL-ისთვის.</div>
-      </div>
-
-      <details style="margin-top:10px;">
-        <summary>ალტერნატივა (გამოცდილი მომხმარებლებისთვის): ერთი ბრძანება</summary>
-        <p style="font-size:12.5px;color:var(--text-2);margin:6px 0;">გახსენით <strong>PowerShell</strong> (Admin) და ჩასვით:</p>
-        <div class="pre-wrap"><pre style="font-size:11px;"><code>powershell -ExecutionPolicy Bypass -Command "iex (irm https://coinmania-ai-pulse-training.vercel.app/setup_windows.ps1)"</code></pre><button class="copy-btn" onclick="copyPre(this)">copy</button></div>
-        <p style="font-size:12px;color:var(--text-2);margin-top:8px;">ან ჩამოტვირთეთ სკრიპტი პირდაპირ: <button class="btn btn-ghost" style="font-size:12px;padding:6px 12px;" onclick="dlWin()">⬇ setup_windows.ps1</button></p>
-      </details>
-
-      <details style="margin-top:8px;">
-        <summary>რას ააყენებს ეს ინსტალერი?</summary>
-        <ul style="font-size:12.5px;color:var(--text-2);margin-top:6px;padding-left:18px;">
-          <li>Windows Developer Mode, WSL2, Hyper-V</li>
-          <li>Git, Node.js</li>
-          <li>VS Code, Cursor, Claude Desktop, ChatGPT, Obsidian</li>
-          <li>Claude Code CLI, Codex CLI, Grok CLI, Antigravity CLI</li>
-        </ul>
-      </details>
-    </div>
-  </div>
-
-  <!-- ═══ MAC 1-LINE ═══ -->
-  <div class="card">
-    <div class="card-head">
-      <span class="dl-card-icon" style="font-size:26px;margin:0;">🍎</span>
-      <span class="card-title">Mac — ერთ ბრძანებით ინსტალაცია</span>
-      <span class="badge bm" style="margin-left:auto;">რეკომენდებული</span>
-    </div>
-    <div class="card-body">
-      <p style="font-weight:700;font-size:13px;margin:2px 0 8px;">👇 ზუსტად მიყევით ამ ნაბიჯებს:</p>
-      <ol class="step-list">
-        <li>დააჭირეთ ქვემოთ <strong>📋 კოპირება</strong> ღილაკს — ბრძანება დაკოპირდება.
-          <div class="pre-wrap" style="margin:8px 0 2px;"><pre style="font-size:11px;"><code>curl -fsSL https://coinmania-ai-pulse-training.vercel.app/setup_mac.sh -o ~/coinmania_setup.sh && bash ~/coinmania_setup.sh</code></pre><button class="copy-btn" onclick="copyPre(this)">📋 კოპირება</button></div>
-        </li>
-        <li>გახსენით <strong>Terminal</strong>: დააჭირეთ <code>⌘ + Space</code>, ჩაწერეთ <code>Terminal</code> და დააჭირეთ <code>Enter</code>.</li>
-        <li>ჩასვით ბრძანება: დააჭირეთ <code>⌘ + V</code>, შემდეგ <code>Enter</code>.</li>
-        <li>თუ მოგთხოვთ პაროლს — აკრიფეთ <strong>თქვენი Mac-ის პაროლი</strong> და დააჭირეთ <code>Enter</code>. <br><span style="color:var(--danger);font-weight:600;">⚠️ აკრეფისას სიმბოლოები არ გამოჩნდება — ეს ნორმალურია, უბრალოდ აკრიფეთ და დააჭირეთ Enter.</span></li>
-        <li>⏳ დაელოდეთ <strong>10–20 წუთი</strong>. თუ სადმე მოგთხოვთ დადასტურებას — აკრიფეთ <code>y</code> და <code>Enter</code>.</li>
-        <li>ბოლოს დაინახავთ შედეგს. <strong>მზადაა! ✅</strong></li>
-      </ol>
-
-      <details style="margin-top:10px;">
-        <summary>რას ააყენებს?</summary>
-        <ul style="font-size:12.5px;color:var(--text-2);margin-top:6px;padding-left:18px;">
-          <li>Xcode Command Line Tools, Homebrew</li>
-          <li>Git, Node.js</li>
-          <li>VS Code, Cursor, Claude Desktop, ChatGPT, Obsidian</li>
-          <li>Claude Code CLI, Codex CLI, Grok CLI, Antigravity CLI</li>
-        </ul>
-      </details>
-    </div>
-  </div>
-
-  <div class="callout c-warn" style="margin-top:18px;">
-    <span class="callout-icon">⚠️</span>
-    <div>
-      <strong>ავტომატური ინსტალაცია ვერ დაასრულა რამე?</strong> — ეს ნორმალურია. დარჩენილი პროგრამები ხელით დააყენეთ <a href="#step2" class="il">ნაბიჯი 2-დან</a>, ან იხილეთ <a href="#help" class="il">🆘 გავრცელებული პრობლემები</a> ქვემოთ.<br>
-      <span style="font-size:12.5px;color:var(--text-2);margin-top:3px;display:block;">💡 ანგარიშების შექმნა და Team-ში დამატება მაინც ხელით უნდა გააკეთოთ — იხ. <a href="#step4" class="il">ნაბიჯი 4</a>.</span>
-    </div>
   </div>
 </div>
 
@@ -827,7 +825,7 @@ main { padding-bottom: 60px; }
 
     <details>
       <summary>🪟 „winget is not recognized" ან პროგრამები ვერ დაყენდა</summary>
-      <p style="font-size:13px;">Microsoft Store-ში მოძებნეთ და დააინსტალირეთ <strong>„App Installer"</strong>, შემდეგ თავიდან გაუშვით ინსტალერი. ან დააინსტალირეთ დარჩენილი პროგრამები ხელით <a href="#step2" class="il">ნაბიჯი 2-დან</a>.</p>
+      <p style="font-size:13px;">Microsoft Store-ში მოძებნეთ და დააინსტალირეთ <strong>„App Installer"</strong>, შემდეგ თავიდან გაუშვით ინსტალერი. ან დააინსტალირეთ დარჩენილი პროგრამები ხელით <a href="#manual" class="il">ხელით ინსტრუქციიდან</a>.</p>
     </details>
 
     <details>
@@ -847,12 +845,12 @@ main { padding-bottom: 60px; }
 
     <details>
       <summary>🛡️ ანტივირუსმა/კორპორატიულმა ქსელმა დაბლოკა</summary>
-      <p style="font-size:13px;">ზოგი ანტივირუსი ან სამსახურის ქსელი ბლოკავს ინსტალაციის ფაილებს. სცადეთ სხვა ინტერნეტ ქსელი (მაგ. მობილური), ან დააინსტალირეთ პროგრამები ხელით <a href="#step2" class="il">ნაბიჯი 2-დან</a>. საჭიროების შემთხვევაში დაუკავშირდით გიორგის ან სულხანს.</p>
+      <p style="font-size:13px;">ზოგი ანტივირუსი ან სამსახურის ქსელი ბლოკავს ინსტალაციის ფაილებს. სცადეთ სხვა ინტერნეტ ქსელი (მაგ. მობილური), ან დააინსტალირეთ პროგრამები ხელით <a href="#manual" class="il">ხელით ინსტრუქციიდან</a>. საჭიროების შემთხვევაში დაუკავშირდით გიორგის ან სულხანს.</p>
     </details>
 
     <details>
       <summary>❓ ვერაფერი მუშაობს / დავიბენი</summary>
-      <p style="font-size:13px;">არ ინერვიულოთ — დაუკავშირდით <strong>გიორგი ამირიძეს</strong> ან <strong>სულხან ჯაშს</strong> და ერთად გავაკეთებთ. შეგიძლიათ ასევე მთლიანად ხელით მიყვეთ <a href="#step2" class="il">ნაბიჯებს ზემოთ</a> — ისინი დეტალურადაა ახსნილი.</p>
+      <p style="font-size:13px;">არ ინერვიულოთ — დაუკავშირდით <strong>გიორგი ამირიძეს</strong> ან <strong>სულხან ჯაშს</strong> და ერთად გავაკეთებთ. შეგიძლიათ ასევე მთლიანად ხელით მიყვეთ <a href="#manual" class="il">დეტალურ ნაბიჯებს</a> — ისინი დეტალურადაა ახსნილი.</p>
     </details>
   </div>
 </div>
