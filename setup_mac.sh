@@ -164,22 +164,24 @@ else
     fi
 fi
 
-# Grok CLI
-info "Grok CLI-ის ინსტალაცია..."
+# Grok CLI (npm — საიმედო და კროს-პლატფორმა)
+info "Grok CLI-ის ინსტალაცია (npm)..."
 if cmd_exists grok; then
     success "Grok CLI უკვე დაინსტალირებულია"
-else
-    if curl -fsSL https://x.ai/cli/install.sh | bash 2>/dev/null; then
+elif cmd_exists npm; then
+    if npm install -g @xai-official/grok >/dev/null 2>&1; then
         success "Grok CLI დაინსტალირებულია"
     else
         warn "Grok CLI ვერ დაინსტალირდა"
-        info "ხელით: curl -fsSL https://x.ai/cli/install.sh | bash"
+        info "ხელით: npm install -g @xai-official/grok"
     fi
+else
+    warn "Grok CLI-ს სჭირდება Node.js/npm — თავიდან გახსენით Terminal და სცადეთ"
 fi
 
-# Antigravity CLI
+# Antigravity CLI (ბრძანება: agy)
 info "Antigravity CLI-ის ინსტალაცია..."
-if cmd_exists antigravity; then
+if cmd_exists agy; then
     success "Antigravity CLI უკვე დაინსტალირებულია"
 else
     if curl -fsSL https://antigravity.google/cli/install.sh | bash 2>/dev/null; then
@@ -195,8 +197,9 @@ fi
 # ══════════════════════════════════════════════
 step "✅" "ნაბიჯი 6: ინსტალაციების შემოწმება"
 
-# PATH-ის განახლება
+# PATH-ის განახლება (npm global bin-ის ჩათვლით)
 export PATH="$PATH:/opt/homebrew/bin:/usr/local/bin:$HOME/.local/bin"
+if cmd_exists npm; then export PATH="$PATH:$(npm prefix -g 2>/dev/null)/bin"; fi
 
 passed=0; failed=0
 
@@ -219,7 +222,7 @@ check_tool "npm"             npm          "--version"
 check_tool "Claude Code CLI" claude       "--version"
 check_tool "Codex CLI"       codex        "--version"
 check_tool "Grok CLI"        grok         "--version"
-check_tool "Antigravity CLI" antigravity  "--version"
+check_tool "Antigravity CLI" agy          "--version"
 
 # ══════════════════════════════════════════════
 # SUMMARY

@@ -110,18 +110,24 @@ if (-not (Test-Cmd "winget")) {
 }
 if (Test-Cmd "winget") {
     $apps = @(
-        @{ Id="Git.Git";                    Name="Git" },
-        @{ Id="OpenJS.NodeJS.LTS";          Name="Node.js LTS" },
-        @{ Id="Microsoft.VisualStudioCode"; Name="VS Code" },
-        @{ Id="Anysphere.Cursor";           Name="Cursor" },
-        @{ Id="Anthropic.Claude";           Name="Claude Desktop" },
-        @{ Id="OpenAI.ChatGPT";             Name="ChatGPT Desktop" },
-        @{ Id="Obsidian.Obsidian";          Name="Obsidian" }
+        @{ Id="Git.Git";                    Name="Git";             Source="winget" },
+        @{ Id="OpenJS.NodeJS.LTS";          Name="Node.js LTS";     Source="winget" },
+        @{ Id="Microsoft.VisualStudioCode"; Name="VS Code";         Source="winget" },
+        @{ Id="Anysphere.Cursor";           Name="Cursor";          Source="winget" },
+        @{ Id="Anthropic.Claude";           Name="Claude Desktop";  Source="winget" },
+        @{ Id="9NT1R1C2HH7J";               Name="ChatGPT Desktop"; Source="msstore" },
+        @{ Id="Obsidian.Obsidian";          Name="Obsidian";        Source="winget" }
     )
     foreach ($app in $apps) {
         Write-Info "Installing $($app.Name)..."
-        winget install --id $app.Id -e --accept-source-agreements --accept-package-agreements --silent 2>$null
-        Write-Success "$($app.Name) - installed (or already present)"
+        winget install --id $app.Id -e --source $app.Source --accept-source-agreements --accept-package-agreements --silent 2>$null
+        $code = $LASTEXITCODE
+        # 0 = installed; -1978335189 (0x8A15002B) = already up to date (no newer version)
+        if ($code -eq 0 -or $code -eq -1978335189) {
+            Write-Success "$($app.Name) - ready"
+        } else {
+            Write-Warn "$($app.Name) - auto-install failed (code $code). Install manually - see website Step 2."
+        }
     }
 } else {
     Write-Warn "winget unavailable - please download apps manually"
@@ -143,9 +149,15 @@ try {
     if ($LASTEXITCODE -eq 0) { Write-Success "Codex CLI installed" } else { throw "exit $LASTEXITCODE" }
 } catch { Write-Warn "Codex CLI: $($_.Exception.Message)" }
 
-Write-Info "Grok CLI..."
-try { Invoke-RestMethod https://x.ai/cli/install.ps1 | Invoke-Expression; Write-Success "Grok CLI installed" }
-catch { Write-Warn "Grok CLI: $($_.Exception.Message)" }
+Write-Info "Grok CLI (via npm)..."
+if (Test-Cmd "npm") {
+    try {
+        & npm install -g "@xai-official/grok" --silent 2>$null
+        if ($LASTEXITCODE -eq 0) { Write-Success "Grok CLI installed" } else { throw "npm exit $LASTEXITCODE" }
+    } catch { Write-Warn "Grok CLI: $($_.Exception.Message)" }
+} else {
+    Write-Warn "Grok CLI needs Node.js/npm. Restart the computer and run again."
+}
 
 Write-Info "Antigravity CLI..."
 try { Invoke-RestMethod https://antigravity.google/cli/install.ps1 | Invoke-Expression; Write-Success "Antigravity CLI installed" }
@@ -156,6 +168,9 @@ catch { Write-Warn "Antigravity CLI: $($_.Exception.Message)" }
 # ============================================================
 Write-Step "Step 5: Verify"
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+# Add install dirs that may not be in the refreshed PATH yet this session
+$extraPaths = @("$env:LOCALAPPDATA\agy\bin", "$env:APPDATA\npm", "$env:USERPROFILE\.local\bin")
+foreach ($p in $extraPaths) { if ((Test-Path $p) -and ($env:Path -notlike "*$p*")) { $env:Path += ";$p" } }
 $passed = 0; $failed = 0
 $checks = @(
     @{ Name="Git";             Command="git";          Args="--version" },
@@ -164,7 +179,7 @@ $checks = @(
     @{ Name="Claude Code CLI"; Command="claude";       Args="--version" },
     @{ Name="Codex CLI";       Command="codex";        Args="--version" },
     @{ Name="Grok CLI";        Command="grok";         Args="--version" },
-    @{ Name="Antigravity CLI"; Command="antigravity";  Args="--version" }
+    @{ Name="Antigravity CLI"; Command="agy";          Args="--version" }
 )
 foreach ($c in $checks) {
     if (Test-Cmd $c.Command) {

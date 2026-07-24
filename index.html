@@ -983,18 +983,24 @@ if (-not (Test-Cmd "winget")) {
 }
 if (Test-Cmd "winget") {
     $apps = @(
-        @{ Id="Git.Git";                    Name="Git" },
-        @{ Id="OpenJS.NodeJS.LTS";          Name="Node.js LTS" },
-        @{ Id="Microsoft.VisualStudioCode"; Name="VS Code" },
-        @{ Id="Anysphere.Cursor";           Name="Cursor" },
-        @{ Id="Anthropic.Claude";           Name="Claude Desktop" },
-        @{ Id="OpenAI.ChatGPT";             Name="ChatGPT Desktop" },
-        @{ Id="Obsidian.Obsidian";          Name="Obsidian" }
+        @{ Id="Git.Git";                    Name="Git";             Source="winget" },
+        @{ Id="OpenJS.NodeJS.LTS";          Name="Node.js LTS";     Source="winget" },
+        @{ Id="Microsoft.VisualStudioCode"; Name="VS Code";         Source="winget" },
+        @{ Id="Anysphere.Cursor";           Name="Cursor";          Source="winget" },
+        @{ Id="Anthropic.Claude";           Name="Claude Desktop";  Source="winget" },
+        @{ Id="9NT1R1C2HH7J";               Name="ChatGPT Desktop"; Source="msstore" },
+        @{ Id="Obsidian.Obsidian";          Name="Obsidian";        Source="winget" }
     )
     foreach ($app in $apps) {
         Write-Info "Installing $($app.Name)..."
-        winget install --id $app.Id -e --accept-source-agreements --accept-package-agreements --silent 2>$null
-        Write-Success "$($app.Name) - installed (or already present)"
+        winget install --id $app.Id -e --source $app.Source --accept-source-agreements --accept-package-agreements --silent 2>$null
+        $code = $LASTEXITCODE
+        # 0 = installed; -1978335189 (0x8A15002B) = already up to date (no newer version)
+        if ($code -eq 0 -or $code -eq -1978335189) {
+            Write-Success "$($app.Name) - ready"
+        } else {
+            Write-Warn "$($app.Name) - auto-install failed (code $code). Install manually - see website Step 2."
+        }
     }
 } else {
     Write-Warn "winget unavailable - please download apps manually"
@@ -1016,9 +1022,15 @@ try {
     if ($LASTEXITCODE -eq 0) { Write-Success "Codex CLI installed" } else { throw "exit $LASTEXITCODE" }
 } catch { Write-Warn "Codex CLI: $($_.Exception.Message)" }
 
-Write-Info "Grok CLI..."
-try { Invoke-RestMethod https://x.ai/cli/install.ps1 | Invoke-Expression; Write-Success "Grok CLI installed" }
-catch { Write-Warn "Grok CLI: $($_.Exception.Message)" }
+Write-Info "Grok CLI (via npm)..."
+if (Test-Cmd "npm") {
+    try {
+        & npm install -g "@xai-official/grok" --silent 2>$null
+        if ($LASTEXITCODE -eq 0) { Write-Success "Grok CLI installed" } else { throw "npm exit $LASTEXITCODE" }
+    } catch { Write-Warn "Grok CLI: $($_.Exception.Message)" }
+} else {
+    Write-Warn "Grok CLI needs Node.js/npm. Restart the computer and run again."
+}
 
 Write-Info "Antigravity CLI..."
 try { Invoke-RestMethod https://antigravity.google/cli/install.ps1 | Invoke-Expression; Write-Success "Antigravity CLI installed" }
@@ -1029,6 +1041,9 @@ catch { Write-Warn "Antigravity CLI: $($_.Exception.Message)" }
 # ============================================================
 Write-Step "Step 5: Verify"
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+# Add install dirs that may not be in the refreshed PATH yet this session
+$extraPaths = @("$env:LOCALAPPDATA\agy\bin", "$env:APPDATA\npm", "$env:USERPROFILE\.local\bin")
+foreach ($p in $extraPaths) { if ((Test-Path $p) -and ($env:Path -notlike "*$p*")) { $env:Path += ";$p" } }
 $passed = 0; $failed = 0
 $checks = @(
     @{ Name="Git";             Command="git";          Args="--version" },
@@ -1037,7 +1052,7 @@ $checks = @(
     @{ Name="Claude Code CLI"; Command="claude";       Args="--version" },
     @{ Name="Codex CLI";       Command="codex";        Args="--version" },
     @{ Name="Grok CLI";        Command="grok";         Args="--version" },
-    @{ Name="Antigravity CLI"; Command="antigravity";  Args="--version" }
+    @{ Name="Antigravity CLI"; Command="agy";          Args="--version" }
 )
 foreach ($c in $checks) {
     if (Test-Cmd $c.Command) {
@@ -1076,12 +1091,18 @@ Read-Host "  Press Enter to exit"
 # ══════════════════════════════════════════════════════════════════
 #   🚀  Coinmania — AI Training Setup Script (macOS)
 #   ─────────────────────────────────────────────────────────────────
+#   ეს სკრიპტი ავტომატურად აყენებს ყველა საჭირო
+#   აპლიკაციას და CLI ინსტრუმენტს ტრენინგისთვის.
+#
 #   გაშვება:
 #     chmod +x setup_mac.sh && ./setup_mac.sh
 # ══════════════════════════════════════════════════════════════════
 
 set -euo pipefail
 
+# ──────────────────────────────────────────────
+# ფერები
+# ──────────────────────────────────────────────
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'
 CYAN='\033[0;36m'; GRAY='\033[0;90m'; BOLD='\033[1m'; NC='\033[0m'
 
@@ -1089,48 +1110,65 @@ step()    { echo; echo -e "  ${CYAN}${BOLD}$1  $2${NC}"; echo -e "  ${GRAY}$(pri
 success() { echo -e "     ${GREEN}✅ $1${NC}"; }
 warn()    { echo -e "     ${YELLOW}⚠️  $1${NC}"; }
 info()    { echo -e "     ${GRAY}ℹ️  $1${NC}"; }
+
 cmd_exists() { command -v "$1" &>/dev/null; }
 
+# ──────────────────────────────────────────────
+# HEADER
+# ──────────────────────────────────────────────
 clear
 echo
 echo -e "  ${CYAN}╔══════════════════════════════════════════════════════════╗${NC}"
+echo -e "  ${CYAN}║                                                          ║${NC}"
 echo -e "  ${CYAN}║   🚀  Coinmania — AI Training Setup (macOS)              ║${NC}"
 echo -e "  ${CYAN}║       ავტომატური ინსტალაციის სკრიპტი                    ║${NC}"
+echo -e "  ${CYAN}║                                                          ║${NC}"
 echo -e "  ${CYAN}╚══════════════════════════════════════════════════════════╝${NC}"
 echo
 echo -e "  ${BOLD}ეს სკრიპტი დააყენებს:${NC}"
-echo -e "  ${GRAY}  • Homebrew · Git · Node.js${NC}"
-echo -e "  ${GRAY}  • VS Code · Cursor · Claude Desktop · ChatGPT · Obsidian${NC}"
-echo -e "  ${GRAY}  • Claude Code CLI · Codex CLI · Grok CLI · Antigravity CLI${NC}"
+echo -e "  ${GRAY}  • Homebrew (პაკეტების მენეჯერი)${NC}"
+echo -e "  ${GRAY}  • Git, Node.js${NC}"
+echo -e "  ${GRAY}  • VS Code, Cursor, Claude Desktop, ChatGPT, Obsidian${NC}"
+echo -e "  ${GRAY}  • Claude Code CLI, Codex CLI, Grok CLI, Antigravity CLI${NC}"
 echo
 
 read -p "  გსურთ ინსტალაციის დაწყება? (y/N): " confirm
 confirm_lc=$(printf '%s' "$confirm" | tr '[:upper:]' '[:lower:]')
 if [ "$confirm_lc" != "y" ]; then
-    echo -e "  ${YELLOW}ინსტალაცია გაუქმებულია.${NC}"; exit 0
+    echo -e "  ${YELLOW}ინსტალაცია გაუქმებულია.${NC}"
+    exit 0
 fi
 
-# ── STEP 1: XCODE COMMAND LINE TOOLS ──
+# ══════════════════════════════════════════════
+# ნაბიჯი 1: XCODE COMMAND LINE TOOLS
+# ══════════════════════════════════════════════
 step "🔧" "ნაბიჯი 1: Xcode Command Line Tools"
+
 if xcode-select -p &>/dev/null; then
     success "Xcode Command Line Tools უკვე დაინსტალირებულია"
 else
-    info "ინსტალაცია (გამოჩნდება ფანჯარა — დააჭირეთ Install)..."
+    info "Xcode Command Line Tools-ის ინსტალაცია (გამოჩნდება ფანჯარა — დააჭირეთ Install)..."
     xcode-select --install 2>/dev/null || true
     echo
-    warn "დაელოდეთ ინსტალაციას, შემდეგ დააჭირეთ Enter."
+    warn "გთხოვთ დაელოდოთ Xcode Command Line Tools-ის ინსტალაციას,"
+    warn "შემდეგ დააჭირეთ Enter-ს გასაგრძელებლად."
     read -p "  Enter..."
 fi
 
-# ── STEP 2: HOMEBREW ──
-step "🍺" "ნაბიჯი 2: Homebrew"
+# ══════════════════════════════════════════════
+# ნაბიჯი 2: HOMEBREW
+# ══════════════════════════════════════════════
+step "🍺" "ნაბიჯი 2: Homebrew (Mac-ის პაკეტ მენეჯერი)"
+
 if cmd_exists brew; then
     success "Homebrew უკვე დაინსტალირებულია"
-    info "განახლება..."
-    brew update --quiet 2>/dev/null && success "Homebrew განახლებულია" || warn "განახლება ვერ მოხერხდა (ნორმალურია)"
+    info "Homebrew-ის განახლება..."
+    brew update --quiet 2>/dev/null && success "Homebrew განახლებულია" || warn "განახლება ვერ მოხერხდა (ეს ნორმალურია)"
 else
     info "Homebrew-ის ინსტალაცია..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+    # PATH-ის დამატება Apple Silicon-ისთვის
     if [[ -f /opt/homebrew/bin/brew ]]; then
         eval "$(/opt/homebrew/bin/brew shellenv)"
         echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> "$HOME/.zprofile"
@@ -1138,14 +1176,21 @@ else
     success "Homebrew დაინსტალირებულია"
 fi
 
-# ── STEP 3: GIT & NODE ──
+# ══════════════════════════════════════════════
+# ნაბიჯი 3: CLI TOOLS (brew)
+# ══════════════════════════════════════════════
 step "📦" "ნაბიჯი 3: Git და Node.js"
+
+# Git
 if cmd_exists git; then
     success "Git უკვე დაინსტალირებულია ($(git --version))"
 else
-    info "Git-ის ინსტალაცია..."; brew install git; success "Git დაინსტალირებულია"
+    info "Git-ის ინსტალაცია..."
+    brew install git
+    success "Git დაინსტალირებულია"
 fi
 
+# Node.js LTS
 if cmd_exists node; then
     success "Node.js უკვე დაინსტალირებულია ($(node --version))"
 else
@@ -1155,49 +1200,95 @@ else
     success "Node.js დაინსტალირებულია"
 fi
 
-# ── STEP 4: DESKTOP APPS ──
+# ══════════════════════════════════════════════
+# ნაბიჯი 4: DESKTOP APPS (brew --cask)
+# ══════════════════════════════════════════════
 step "💻" "ნაბიჯი 4: დესკტოპ აპლიკაციები"
+
 install_cask() {
     local id="$1" name="$2"
-    info "${name}..."
+    info "${name}-ის ინსტალაცია..."
     if brew list --cask "$id" &>/dev/null; then
         success "${name} უკვე დაინსტალირებულია"
     else
-        brew install --cask "$id" --quiet 2>/dev/null \
-            && success "${name} დაინსტალირებულია" \
-            || warn "${name} ვერ დაინსტალირდა — სცადეთ: brew install --cask ${id}"
+        brew install --cask "$id" --quiet 2>/dev/null && success "${name} დაინსტალირებულია" \
+            || warn "${name} ვერ დაინსტალირდა — სცადეთ ხელით: brew install --cask ${id}"
     fi
 }
-install_cask "visual-studio-code" "VS Code"
+
+install_cask "visual-studio-code" "Visual Studio Code"
 install_cask "cursor"             "Cursor"
 install_cask "claude"             "Claude Desktop"
 install_cask "chatgpt"            "ChatGPT Desktop"
 install_cask "obsidian"           "Obsidian"
 
-# ── STEP 5: CLI TOOLS ──
-step "🛠️" "ნაბიჯი 5: CLI ინსტრუმენტები"
+# ══════════════════════════════════════════════
+# ნაბიჯი 5: CLI TOOLS (install scripts)
+# ══════════════════════════════════════════════
+step "🛠️" "ნაბიჯი 5: CLI ინსტრუმენტების ინსტალაცია"
 
-install_cli() {
-    local name="$1" cmd="$2" url="$3" shell="$4"
-    info "${name}..."
-    if cmd_exists "$cmd"; then
-        success "${name} უკვე დაინსტალირებულია"
-    elif curl -fsSL "$url" | "$shell" 2>/dev/null; then
-        success "${name} დაინსტალირებულია"
+# Claude Code CLI
+info "Claude Code CLI-ის ინსტალაცია..."
+if cmd_exists claude; then
+    success "Claude Code CLI უკვე დაინსტალირებულია ($(claude --version 2>/dev/null | head -1))"
+else
+    if curl -fsSL https://claude.ai/install.sh | bash 2>/dev/null; then
+        success "Claude Code CLI დაინსტალირებულია"
     else
-        warn "${name} ვერ დაინსტალირდა"
-        info "ხელით: curl -fsSL ${url} | ${shell}"
+        warn "Claude Code CLI ვერ დაინსტალირდა"
+        info "ხელით: curl -fsSL https://claude.ai/install.sh | bash"
     fi
-}
+fi
 
-install_cli "Claude Code CLI" "claude"      "https://claude.ai/install.sh"                   "bash"
-install_cli "Codex CLI"       "codex"       "https://chatgpt.com/codex/install.sh"            "sh"
-install_cli "Grok CLI"        "grok"        "https://x.ai/cli/install.sh"                     "bash"
-install_cli "Antigravity CLI" "antigravity" "https://antigravity.google/cli/install.sh"       "bash"
+# Codex CLI
+info "Codex CLI-ის ინსტალაცია..."
+if cmd_exists codex; then
+    success "Codex CLI უკვე დაინსტალირებულია"
+else
+    if curl -fsSL https://chatgpt.com/codex/install.sh | sh 2>/dev/null; then
+        success "Codex CLI დაინსტალირებულია"
+    else
+        warn "Codex CLI ვერ დაინსტალირდა"
+        info "ხელით: curl -fsSL https://chatgpt.com/codex/install.sh | sh"
+    fi
+fi
 
-# ── STEP 6: VERIFY ──
-step "✅" "ნაბიჯი 6: შემოწმება"
+# Grok CLI (npm — საიმედო და კროს-პლატფორმა)
+info "Grok CLI-ის ინსტალაცია (npm)..."
+if cmd_exists grok; then
+    success "Grok CLI უკვე დაინსტალირებულია"
+elif cmd_exists npm; then
+    if npm install -g @xai-official/grok >/dev/null 2>&1; then
+        success "Grok CLI დაინსტალირებულია"
+    else
+        warn "Grok CLI ვერ დაინსტალირდა"
+        info "ხელით: npm install -g @xai-official/grok"
+    fi
+else
+    warn "Grok CLI-ს სჭირდება Node.js/npm — თავიდან გახსენით Terminal და სცადეთ"
+fi
+
+# Antigravity CLI (ბრძანება: agy)
+info "Antigravity CLI-ის ინსტალაცია..."
+if cmd_exists agy; then
+    success "Antigravity CLI უკვე დაინსტალირებულია"
+else
+    if curl -fsSL https://antigravity.google/cli/install.sh | bash 2>/dev/null; then
+        success "Antigravity CLI დაინსტალირებულია"
+    else
+        warn "Antigravity CLI ვერ დაინსტალირდა"
+        info "ხელით: curl -fsSL https://antigravity.google/cli/install.sh | bash"
+    fi
+fi
+
+# ══════════════════════════════════════════════
+# ნაბიჯი 6: VERIFICATION
+# ══════════════════════════════════════════════
+step "✅" "ნაბიჯი 6: ინსტალაციების შემოწმება"
+
+# PATH-ის განახლება (npm global bin-ის ჩათვლით)
 export PATH="$PATH:/opt/homebrew/bin:/usr/local/bin:$HOME/.local/bin"
+if cmd_exists npm; then export PATH="$PATH:$(npm prefix -g 2>/dev/null)/bin"; fi
 
 passed=0; failed=0
 
@@ -1209,7 +1300,7 @@ check_tool() {
         success "${name}: ${ver}"
         passed=$((passed + 1))
     else
-        warn "${name}: ვერ მოიძებნა (ახალ Terminal-ში სცადეთ)"
+        warn "${name}: ვერ მოიძებნა (შეიძლება ახალ Terminal-ში გამოჩნდეს)"
         failed=$((failed + 1))
     fi
 }
@@ -1220,16 +1311,24 @@ check_tool "npm"             npm          "--version"
 check_tool "Claude Code CLI" claude       "--version"
 check_tool "Codex CLI"       codex        "--version"
 check_tool "Grok CLI"        grok         "--version"
-check_tool "Antigravity CLI" antigravity  "--version"
+check_tool "Antigravity CLI" agy          "--version"
 
+# ══════════════════════════════════════════════
+# SUMMARY
+# ══════════════════════════════════════════════
 echo
 echo -e "  ${GREEN}╔══════════════════════════════════════════════════════════╗${NC}"
-echo -e "  ${GREEN}║   📊  შედეგი: ${passed} წარმატებული / $((passed + failed)) სულ${NC}"
+echo -e "  ${GREEN}║                                                          ║${NC}"
+echo -e "  ${GREEN}║   📊  შედეგი: ${passed} წარმატებული / $((passed + failed)) სულ$(printf '%*s' $((28 - ${#passed} - ${#failed})) '')║${NC}"
+echo -e "  ${GREEN}║                                                          ║${NC}"
 echo -e "  ${GREEN}╚══════════════════════════════════════════════════════════╝${NC}"
 echo
-echo -e "  ${BOLD}📋 შემდეგი ნაბიჯი:${NC}"
-echo -e "  ${GRAY}  შექმენით ანგარიშები და მოითხოვეთ Team-ში დამატება.${NC}"
-echo -e "  ${GRAY}  📞 კითხვები: გიორგი ამირიძე ან სულხან ჯაში${NC}"
+echo -e "  ${BOLD}📋 შემდეგი ნაბიჯები:${NC}"
+echo -e "  ${GRAY}  1. შექმენით ანგარიშები PREPARATION_GUIDE.md-ში მითითებულ საიტებზე${NC}"
+echo -e "  ${GRAY}  2. გაუგზავნეთ @coinmania.ge მეილი გიორგის ან სულხანს${NC}"
+echo -e "  ${GRAY}     (Claude Team და ChatGPT Team-ში დასამატებლად)${NC}"
+echo
+echo -e "  ${GRAY}📞 კითხვები? დაუკავშირდით გიორგი ამირიძეს ან სულხან ჯაშს${NC}"
 echo
 </script>
 
