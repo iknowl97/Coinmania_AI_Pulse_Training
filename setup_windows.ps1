@@ -109,24 +109,59 @@ if (-not (Test-Cmd "winget")) {
     catch { Write-Warn "winget unavailable - please install apps manually from the website" }
 }
 if (Test-Cmd "winget") {
+    # Verify = CLI command that proves the tool works (empty for GUI-only apps)
     $apps = @(
-        @{ Id="Git.Git";                    Name="Git";             Source="winget" },
-        @{ Id="OpenJS.NodeJS.LTS";          Name="Node.js LTS";     Source="winget" },
-        @{ Id="Microsoft.VisualStudioCode"; Name="VS Code";         Source="winget" },
-        @{ Id="Anysphere.Cursor";           Name="Cursor";          Source="winget" },
-        @{ Id="Anthropic.Claude";           Name="Claude Desktop";  Source="winget" },
-        @{ Id="9NT1R1C2HH7J";               Name="ChatGPT Desktop"; Source="msstore" },
-        @{ Id="Obsidian.Obsidian";          Name="Obsidian";        Source="winget" }
+        @{ Id="Git.Git";                    Name="Git";             Source="winget"; Verify="git" },
+        @{ Id="OpenJS.NodeJS.LTS";          Name="Node.js";         Source="winget"; Verify="node" },
+        @{ Id="Microsoft.VisualStudioCode"; Name="VS Code";         Source="winget"; Verify="" },
+        @{ Id="Anysphere.Cursor";           Name="Cursor";          Source="winget"; Verify="" },
+        @{ Id="Anthropic.Claude";           Name="Claude Desktop";  Source="winget"; Verify="" },
+        @{ Id="9NT1R1C2HH7J";               Name="ChatGPT Desktop"; Source="msstore"; Verify="" },
+        @{ Id="Obsidian.Obsidian";          Name="Obsidian";        Source="winget"; Verify="" }
     )
     foreach ($app in $apps) {
-        Write-Info "Installing $($app.Name)..."
+        $name = $app.Name
+
+        # PRE-CHECK: is it already installed?
+        $present = $false
+        if ($app.Verify -and (Test-Cmd $app.Verify)) {
+            $present = $true          # CLI works -> definitely present (and possibly newer than winget's copy)
+        } elseif (-not $app.Verify) {
+            winget list --id $app.Id -e 2>$null | Out-Null
+            if ($LASTEXITCODE -eq 0) { $present = $true }
+        }
+
+        if ($present) {
+            # Already installed -> only upgrade if a newer version exists (no redundant reinstall)
+            Write-Info "$name already installed - checking for updates..."
+            winget upgrade --id $app.Id -e --source $app.Source --accept-source-agreements --accept-package-agreements --silent 2>$null | Out-Null
+            if ($app.Verify -and (Test-Cmd $app.Verify)) {
+                $v = ""; try { $v = (& $app.Verify --version 2>$null | Select-Object -First 1) } catch {}
+                Write-Success "$name - installed and working ($v)"
+            } else {
+                Write-Success "$name - installed (up to date)"
+            }
+            continue
+        }
+
+        # INSTALL (not present)
+        Write-Info "Installing $name..."
         winget install --id $app.Id -e --source $app.Source --accept-source-agreements --accept-package-agreements --silent 2>$null
         $code = $LASTEXITCODE
-        # 0 = installed; -1978335189 (0x8A15002B) = already up to date (no newer version)
-        if ($code -eq 0 -or $code -eq -1978335189) {
-            Write-Success "$($app.Name) - ready"
+
+        # POST-CHECK: confirm it actually installed
+        if ($app.Verify) {
+            $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+            if (Test-Cmd $app.Verify) {
+                $v = ""; try { $v = (& $app.Verify --version 2>$null | Select-Object -First 1) } catch {}
+                Write-Success "$name - installed and working ($v)"
+            } else {
+                Write-Warn "$name - installed but not detected yet (restart may be needed)"
+            }
+        } elseif ($code -eq 0 -or $code -eq -1978335189) {
+            Write-Success "$name - installed"
         } else {
-            Write-Warn "$($app.Name) - auto-install failed (code $code). Install manually - see website Step 2."
+            Write-Warn "$name - auto-install failed (code $code). Install manually - see website Step 2."
         }
     }
 } else {
@@ -138,30 +173,64 @@ if (Test-Cmd "winget") {
 # ============================================================
 Write-Step "Step 4: CLI tools"
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+$extraPaths = @("$env:LOCALAPPDATA\agy\bin", "$env:APPDATA\npm", "$env:USERPROFILE\.local\bin")
+foreach ($p in $extraPaths) { if ((Test-Path $p) -and ($env:Path -notlike "*$p*")) { $env:Path += ";$p" } }
 
-Write-Info "Claude Code CLI..."
-try { Invoke-RestMethod https://claude.ai/install.ps1 | Invoke-Expression; Write-Success "Claude Code CLI installed" }
-catch { Write-Warn "Claude Code CLI: $($_.Exception.Message)" }
+# Claude Code CLI (self-updating)
+if (Test-Cmd "claude") {
+    $v = ""; try { $v = (claude --version 2>$null | Select-Object -First 1) } catch {}
+    Write-Success "Claude Code CLI - already installed ($v); it auto-updates"
+} else {
+    Write-Info "Installing Claude Code CLI..."
+    try {
+        Invoke-RestMethod https://claude.ai/install.ps1 | Invoke-Expression
+        if (Test-Cmd "claude") { Write-Success "Claude Code CLI installed" }
+        else { Write-Warn "Claude Code CLI - installed but not detected (a restart may help)" }
+    } catch { Write-Warn "Claude Code CLI: $($_.Exception.Message)" }
+}
 
-Write-Info "Codex CLI..."
-try {
-    $null = & powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex" 2>&1
-    if ($LASTEXITCODE -eq 0) { Write-Success "Codex CLI installed" } else { throw "exit $LASTEXITCODE" }
-} catch { Write-Warn "Codex CLI: $($_.Exception.Message)" }
+# Codex CLI
+if (Test-Cmd "codex") {
+    $v = ""; try { $v = (codex --version 2>$null | Select-Object -First 1) } catch {}
+    Write-Success "Codex CLI - already installed ($v)"
+} else {
+    Write-Info "Installing Codex CLI..."
+    try {
+        $null = & powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex" 2>&1
+        $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+        if (Test-Cmd "codex") { Write-Success "Codex CLI installed" } else { throw "not detected after install" }
+    } catch { Write-Warn "Codex CLI: $($_.Exception.Message)" }
+}
 
-Write-Info "Grok CLI (via npm)..."
-if (Test-Cmd "npm") {
+# Grok CLI (npm)
+if (Test-Cmd "grok") {
+    $v = ""; try { $v = (grok --version 2>$null | Select-Object -First 1) } catch {}
+    Write-Success "Grok CLI - already installed ($v)"
+} elseif (Test-Cmd "npm") {
+    Write-Info "Installing Grok CLI (npm)..."
     try {
         & npm install -g "@xai-official/grok" --silent 2>$null
-        if ($LASTEXITCODE -eq 0) { Write-Success "Grok CLI installed" } else { throw "npm exit $LASTEXITCODE" }
+        if ($LASTEXITCODE -eq 0 -and (Test-Cmd "grok")) { Write-Success "Grok CLI installed" }
+        elseif ($LASTEXITCODE -eq 0) { Write-Success "Grok CLI installed (open a new window to use it)" }
+        else { throw "npm exit $LASTEXITCODE" }
     } catch { Write-Warn "Grok CLI: $($_.Exception.Message)" }
 } else {
     Write-Warn "Grok CLI needs Node.js/npm. Restart the computer and run again."
 }
 
-Write-Info "Antigravity CLI..."
-try { Invoke-RestMethod https://antigravity.google/cli/install.ps1 | Invoke-Expression; Write-Success "Antigravity CLI installed" }
-catch { Write-Warn "Antigravity CLI: $($_.Exception.Message)" }
+# Antigravity CLI (self-updating; command name is 'agy')
+if (Test-Cmd "agy") {
+    $v = ""; try { $v = (agy --version 2>$null | Select-Object -First 1) } catch {}
+    Write-Success "Antigravity CLI - already installed ($v); it auto-updates"
+} else {
+    Write-Info "Installing Antigravity CLI..."
+    try {
+        Invoke-RestMethod https://antigravity.google/cli/install.ps1 | Invoke-Expression
+        if (Test-Path "$env:LOCALAPPDATA\agy\bin") { $env:Path += ";$env:LOCALAPPDATA\agy\bin" }
+        if (Test-Cmd "agy") { Write-Success "Antigravity CLI installed" }
+        else { Write-Warn "Antigravity CLI - installed but not detected (a restart may help)" }
+    } catch { Write-Warn "Antigravity CLI: $($_.Exception.Message)" }
+}
 
 # ============================================================
 # STEP 5: VERIFY
